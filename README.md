@@ -1,1 +1,0 @@
-# Khatek-Digital-Tech
