@@ -186,6 +186,11 @@
       border-color: rgba(37, 99, 235, 0.2);
       box-shadow: 0 12px 30px var(--lemon-dark);
     }
+        .btn-secondary1 {
+      color: var(--primary);
+      background: #fff;
+      border-color: rgba(37, 99, 235, 0.2);
+    }
 
     .btn-secondary:hover {
       border-color: var(--primary);
@@ -232,7 +237,6 @@
       place-items: center;
       color: #fff;
       background: linear-gradient(135deg, var(--primary), var(--accent));
-      box-shadow: 0 20px 45px var(--lemon-dark);
       animation: pulseSpin 1.3s ease-in-out infinite;
       font-weight: 950;
       font-size: 1.4rem;
