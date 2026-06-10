@@ -162,12 +162,7 @@
 
 .btn-primary {
   color: #fff;
-  background: linear-gradient(
-    135deg,
-    var(--primary),
-    var(--secondary),
-    var(--lemon-dark)
-  );
+  background: #2563EB;
 }
   .feature-card:nth-child(2),
 .feature-card:nth-child(5) {
