@@ -332,10 +332,10 @@
       transition: var(--transition);
     }
 
-    .mobile-toggle:hover {
+    /* .mobile-toggle:hover {
       color: var(--primary);
       border-color: var(--lemon-dark);
-    }
+    } */
 
 .hero {
   min-height: 100vh;
