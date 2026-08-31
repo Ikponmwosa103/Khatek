@@ -16,14 +16,13 @@ COPY . /var/www/html/
 RUN chown -R www-data:www-data /var/www/html && \
     chmod -R 755 /var/www/html
 
-# Allow .htaccess overrides (optional but common)
+# Allow .htaccess overrides
 RUN echo '<Directory /var/www/html/>\n\
     Options Indexes FollowSymLinks\n\
     AllowOverride All\n\
     Require all granted\n\
 </Directory>' > /etc/apache2/sites-available/000-default.conf
 
-# Railway automatically sets PORT, Apache will use it
 EXPOSE 80
 
 CMD ["apache2-foreground"]
