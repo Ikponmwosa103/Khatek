@@ -13,17 +13,15 @@ RUN a2dismod mpm_event mpm_worker 2>/dev/null || true && \
 COPY . /var/www/html/
 
 # Set proper permissions
-RUN chown -R www-data:www-data /var/www/html && \
-    chmod -R 755 /var/www/html
+RUN chown -R www-data:www-data /var/www/html
 
-# Allow .htaccess overrides (optional)
-RUN echo '<Directory /var/www/html/>\n\
-    Options Indexes FollowSymLinks\n\
-    AllowOverride All\n\
-    Require all granted\n\
-</Directory>' > /etc/apache2/sites-available/000-default.conf
+# Configure port - Railway sets PORT env var
+ENV APACHE_LISTEN_PORT=8080
 
-EXPOSE 80
+# Use Railway's PORT or default to 8080
+RUN sed -i "s/Listen 80/Listen 8080/" /etc/apache2/ports.conf && \
+    sed -i "s/*:80/*:8080/" /etc/apache2/sites-enabled/000-default.conf
 
-# Apache will use PORT automatically on Railway
+EXPOSE 8080
+
 CMD ["apache2-foreground"]
