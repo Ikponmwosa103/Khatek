@@ -1,24 +1,36 @@
-FROM php:8.3-apache
+# Use official PHP with Apache base image
+FROM php:8.2-apache
 
+# Install system dependencies and required PHP extensions
+RUN apt-get update && apt-get install -y \
+    libpng-dev \
+    libjpeg-dev \
+    libfreetype6-dev \
+    zip \
+    unzip \
+    git \
+    && docker-php-ext-configure gd --with-freetype --with-jpeg \
+    && docker-php-ext-install -j$(nproc) gd pdo pdo_mysql mysqli
+
+# Fix Apache MPM Conflicts (Disables event/worker, enforces prefork)
+RUN a2dismod mpm_event mpm_worker || true \
+    && a2enmod mpm_prefork
+
+# Enable Apache mod_rewrite for custom routing / .htaccess
+RUN a2enmod rewrite
+
+# Set working directory inside container
 WORKDIR /var/www/html
 
-# Enable required Apache modules and configure rewrite rules
-RUN a2enmod rewrite headers expires deflate \
-    && sed -ri 's/AllowOverride None/AllowOverride All/g' /etc/apache2/apache2.conf \
-    && echo "ServerName localhost" >> /etc/apache2/apache2.conf
-
-# Copy project files
+# Copy application files to Apache root
 COPY . /var/www/html/
 
-# Create uploads directory and set permissions
-RUN mkdir -p /var/www/html/public/uploads \
-    && chown -R www-data:www-data /var/www/html \
-    && find /var/www/html -type d -exec chmod 755 {} \; \
-    && find /var/www/html -type f -exec chmod 644 {} \; \
-    && chown -R www-data:www-data /var/www/html/public/uploads \
-    && chmod -R 775 /var/www/html/public/uploads
+# Set proper permissions for web user
+RUN chown -R www-data:www-data /var/www/html \
+    && chmod -R 755 /var/www/html
 
-# Railway port binding configuration via start command
-EXPOSE 8080
+# Expose standard web port
+EXPOSE 80
 
-CMD ["sh", "-c", "sed -i \"s/80/${PORT:-8080}/g\" /etc/apache2/ports.conf /etc/apache2/sites-available/*.conf && apache2-foreground"]
+# Start Apache in the foreground
+CMD ["apache2-foreground"]
