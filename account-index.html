@@ -188,19 +188,294 @@
       box-shadow:0 4px 16px rgba(15,23,42,.05)
     }
     .btn-secondary:hover{border-color:var(--blue);color:var(--blue);transform:translateY(-2px)}
-    .hero-stats{
-      display:flex;gap:12px;flex-wrap:wrap;justify-content:center;max-width:520px
-    }
-    .stat-card{
-      background:rgba(255,255,255,.65);
-      backdrop-filter:blur(16px);
-      border:1px solid rgba(255,255,255,.8);
-      border-radius:20px;padding:16px 22px;min-width:130px;
-      box-shadow:0 6px 24px rgba(15,23,42,.05)
-    }
-    .stat-card strong{display:block;font-size:24px;font-weight:850;letter-spacing:-.03em}
-    .stat-card span{font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:.06em;font-weight:650}
+.hero-stats {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+  justify-content: center;
+  width: 100%;
+}
+/* ================================
+   PREMIUM HERO STATS
+================================ */
 
+.hero-stats {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 14px;
+  margin-top: 30px;
+  width: 100%;
+  max-width: 720px;
+}
+
+.stat-card {
+  position: relative;
+  isolation: isolate;
+  min-height: 145px;
+  padding: 24px 22px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+
+  border: 1px solid rgba(226, 232, 240, 0.85);
+  border-radius: 24px;
+
+  background:
+    linear-gradient(
+      145deg,
+      rgba(255, 255, 255, 0.96),
+      rgba(248, 250, 252, 0.72)
+    );
+
+  box-shadow:
+    0 20px 45px rgba(15, 23, 42, 0.07),
+    0 5px 15px rgba(15, 23, 42, 0.035),
+    inset 0 1px 0 rgba(255, 255, 255, 0.95);
+
+  backdrop-filter: blur(18px);
+  -webkit-backdrop-filter: blur(18px);
+
+  overflow: hidden;
+
+  transform: translateY(0);
+  transition:
+    transform 0.45s cubic-bezier(0.22, 1, 0.36, 1),
+    box-shadow 0.45s ease,
+    border-color 0.35s ease;
+}
+
+
+/* Soft ambient glow */
+
+.stat-card::before {
+  content: "";
+  position: absolute;
+  z-index: -1;
+
+  width: 130px;
+  height: 130px;
+
+  top: -70px;
+  right: -55px;
+
+  border-radius: 50%;
+
+  background: var(--primary);
+
+  opacity: 0.08;
+  filter: blur(8px);
+
+  transition:
+    transform 0.5s ease,
+    opacity 0.5s ease;
+}
+
+
+/* Premium top highlight */
+
+.stat-card::after {
+  content: "";
+
+  position: absolute;
+
+  top: 0;
+  left: 22px;
+  right: 22px;
+
+  height: 2px;
+
+  border-radius: 999px;
+
+  background: linear-gradient(
+    90deg,
+    transparent,
+    var(--primary),
+    transparent
+  );
+
+  opacity: 0.45;
+
+  transition:
+    left 0.4s ease,
+    right 0.4s ease,
+    opacity 0.4s ease;
+}
+
+
+/* Hover */
+
+.stat-card:hover {
+  transform: translateY(-9px) scale(1.015);
+
+  border-color: rgba(226, 232, 240, 1);
+
+  box-shadow:
+    0 30px 65px rgba(15, 23, 42, 0.11),
+    0 10px 25px rgba(15, 23, 42, 0.05),
+    inset 0 1px 0 rgba(255, 255, 255, 1);
+}
+
+.stat-card:hover::before {
+  transform: scale(1.7);
+  opacity: 0.13;
+}
+
+.stat-card:hover::after {
+  left: 10px;
+  right: 10px;
+  opacity: 0.8;
+}
+
+
+/* Number */
+
+.stat-card strong {
+  position: relative;
+
+  display: block;
+
+  color: var(--primary);
+
+  font-size: clamp(1.8rem, 3vw, 2.35rem);
+  line-height: 1;
+
+  font-weight: 900;
+
+  letter-spacing: -0.065em;
+
+  text-shadow:
+    0 4px 18px rgba(15, 23, 42, 0.08);
+
+  transition:
+    transform 0.4s cubic-bezier(0.22, 1, 0.36, 1),
+    letter-spacing 0.4s ease;
+}
+
+.stat-card:hover strong {
+  transform: translateX(3px);
+  letter-spacing: -0.08em;
+}
+
+
+/* Label */
+
+.stat-card span {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+
+  margin-top: 14px;
+
+  color: var(--muted);
+
+  font-size: 0.78rem;
+  line-height: 1.35;
+
+  font-weight: 750;
+
+  letter-spacing: 0.01em;
+
+  transition:
+    color 0.3s ease,
+    transform 0.3s ease;
+}
+
+.stat-card span::before {
+  content: "";
+
+  width: 6px;
+  height: 6px;
+
+  flex: 0 0 6px;
+
+  border-radius: 50%;
+
+  background: var(--primary);
+
+  box-shadow:
+    0 0 0 4px rgba(15, 23, 42, 0.035);
+
+  opacity: 0.65;
+
+  transition:
+    transform 0.3s ease,
+    opacity 0.3s ease;
+}
+
+.stat-card:hover span {
+  transform: translateX(3px);
+}
+
+.stat-card:hover span::before {
+  transform: scale(1.35);
+  opacity: 1;
+}
+
+
+/* ================================
+   DIFFERENT VISUAL WEIGHT
+================================ */
+
+/* ================================
+   RESPONSIVE
+================================ */
+
+@media (max-width: 700px) {
+  .hero-stats {
+    grid-template-columns: 1fr;
+    gap: 12px;
+    margin-top: 24px;
+  }
+
+  .stat-card {
+    min-height: 118px;
+    padding: 21px;
+  }
+
+  .stat-card:nth-child(1),
+  .stat-card:nth-child(2),
+  .stat-card:nth-child(3) {
+    transform: none;
+  }
+
+  .stat-card:hover,
+  .stat-card:nth-child(1):hover,
+  .stat-card:nth-child(2):hover,
+  .stat-card:nth-child(3):hover {
+    transform: translateY(-5px);
+  }
+}
+
+@media (max-width: 420px) {
+  .stat-card {
+    min-height: 108px;
+    padding: 19px;
+    border-radius: 20px;
+  }
+
+  .stat-card strong {
+    font-size: 1.8rem;
+  }
+
+  .stat-card span {
+    font-size: 0.75rem;
+  }
+}
+
+
+/* ================================
+   REDUCED MOTION
+================================ */
+
+@media (prefers-reduced-motion: reduce) {
+  .stat-card,
+  .stat-card strong,
+  .stat-card span,
+  .stat-card::before,
+  .stat-card::after {
+    transition: none;
+  }
+}
     /* ===== SECTIONS ===== */
     .section{padding:88px 0}
     .section-alt{background:rgba(255,255,255,.5)}
@@ -456,9 +731,189 @@
       *,*::before,*::after{animation:none!important;transition:none!important}
       .reveal{opacity:1;transform:none}
     }
+  
+    /* ===== LOGGED-IN ACCOUNT UI ===== */
+    .account-profile-btn{
+      width:42px;height:42px;border:0;border-radius:50%;
+      background:linear-gradient(135deg,var(--blue),var(--violet));
+      color:#fff;display:grid;place-items:center;cursor:pointer;
+      box-shadow:0 7px 22px rgba(37,99,235,.28);
+      transition:.25s;flex:none
+    }
+    .account-profile-btn:hover{transform:translateY(-2px);box-shadow:0 10px 28px rgba(37,99,235,.35)}
+    .account-profile-btn svg{width:21px;height:21px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+
+    .account-overlay{
+      position:fixed;inset:0;z-index:1998;
+      background:rgba(15,23,42,.28);
+      backdrop-filter:blur(3px);-webkit-backdrop-filter:blur(3px);
+      opacity:0;visibility:hidden;transition:.3s
+    }
+    .account-overlay.show{opacity:1;visibility:visible}
+
+    .account-sidebar{
+      position:fixed;top:0;right:0;bottom:0;z-index:1999;
+      width:min(390px,calc(100% - 24px));
+      background:rgba(255,255,255,.94);
+      backdrop-filter:blur(28px) saturate(180%);
+      -webkit-backdrop-filter:blur(28px) saturate(180%);
+      border-left:1px solid rgba(255,255,255,.8);
+      box-shadow:-20px 0 70px rgba(15,23,42,.18);
+      transform:translateX(105%);transition:transform .35s ease;
+      display:flex;flex-direction:column
+    }
+    .account-sidebar.show{transform:translateX(0)}
+
+    .account-sidebar-head{
+      display:flex;align-items:center;justify-content:space-between;
+      padding:22px 20px;border-bottom:1px solid var(--line)
+    }
+    .account-sidebar-head h2{font-size:18px;font-weight:850;letter-spacing:-.02em}
+    .account-close{
+      width:38px;height:38px;border:0;border-radius:50%;
+      background:rgba(15,23,42,.06);color:var(--ink);
+      display:grid;place-items:center;cursor:pointer;font-size:21px
+    }
+    .account-close:hover{background:rgba(37,99,235,.1);color:var(--blue)}
+
+    .account-sidebar-body{padding:24px 20px;overflow-y:auto;flex:1}
+    .account-user-card{
+      padding:22px;border-radius:24px;
+      background:linear-gradient(135deg,rgba(37,99,235,.1),rgba(124,58,237,.08));
+      border:1px solid rgba(37,99,235,.08);text-align:center;margin-bottom:22px
+    }
+    .account-avatar{
+      width:72px;height:72px;border-radius:50%;margin:0 auto 12px;
+      background:linear-gradient(135deg,var(--blue),var(--violet));
+      color:#fff;display:grid;place-items:center;
+      font-size:25px;font-weight:850;box-shadow:0 10px 28px rgba(37,99,235,.22)
+    }
+    .account-user-card h3{font-size:17px;font-weight:800;margin-bottom:3px}
+    .account-user-card p{font-size:13px;color:var(--muted);word-break:break-word}
+
+    .account-menu{display:grid;gap:10px}
+    .account-menu-btn{
+      width:100%;display:flex;align-items:center;gap:13px;
+      min-height:54px;padding:0 16px;border:1px solid var(--line);
+      border-radius:16px;background:#fff;color:var(--ink);
+      cursor:pointer;text-align:left;font-size:14px;font-weight:700;transition:.2s
+    }
+    .account-menu-btn:hover{border-color:#bfdbfe;background:rgba(37,99,235,.05);color:var(--blue)}
+    .account-menu-btn.danger{color:#dc2626}
+    .account-menu-btn.danger:hover{border-color:#fecaca;background:#fef2f2;color:#b91c1c}
+    .account-menu-icon{
+      width:36px;height:36px;border-radius:11px;
+      background:rgba(37,99,235,.1);color:var(--blue);
+      display:grid;place-items:center;flex:none
+    }
+    .account-menu-btn.danger .account-menu-icon{background:#fee2e2;color:#dc2626}
+    .account-menu-icon svg{width:18px;height:18px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+
+    .account-sidebar-foot{
+      padding:16px 20px;border-top:1px solid var(--line);
+      font-size:11px;color:var(--muted);text-align:center
+    }
+
+    .account-toast{
+      position:fixed;left:50%;top:50%;z-index:3000;
+      width:min(380px,calc(100% - 32px));padding:24px;
+      background:rgba(255,255,255,.97);backdrop-filter:blur(24px);
+      border:1px solid rgba(255,255,255,.9);border-radius:24px;
+      box-shadow:0 30px 90px rgba(15,23,42,.22);
+      text-align:center;opacity:0;visibility:hidden;
+      transform:translate(-50%,-45%) scale(.94);transition:.3s
+    }
+    .account-toast.show{opacity:1;visibility:visible;transform:translate(-50%,-50%) scale(1)}
+    .account-toast-icon{
+      width:54px;height:54px;margin:0 auto 12px;border-radius:50%;
+      display:grid;place-items:center;background:#dcfce7;color:#16a34a;
+      font-size:24px;font-weight:850
+    }
+    .account-toast.error .account-toast-icon{background:#fee2e2;color:#dc2626}
+    .account-toast h3{font-size:18px;font-weight:850;margin-bottom:5px}
+    .account-toast p{font-size:13px;color:var(--muted);line-height:1.5}
+    .account-toast-btn{
+      margin-top:16px;min-height:44px;padding:0 20px;border:0;
+      border-radius:999px;background:linear-gradient(135deg,var(--blue),#4f46e5);
+      color:#fff;font-weight:750;cursor:pointer
+    }
+
+    @media(max-width:768px){
+      .account-profile-btn{width:40px;height:40px}
+      .account-sidebar{width:min(380px,calc(100% - 14px))}
+      .nav-auth.account-nav-auth{
+        flex-direction:row;margin:12px 0 0;padding-top:14px;
+        border-top:1px solid var(--line);justify-content:center
+      }
+    }
+
   </style>
 </head>
 <body>
+  <!-- ACCOUNT SIDEBAR -->
+  <div class="account-overlay" id="accountOverlay"></div>
+
+  <aside class="account-sidebar" id="accountSidebar" aria-hidden="true">
+    <div class="account-sidebar-head">
+      <h2>Your Account</h2>
+      <button class="account-close" id="accountClose" type="button" aria-label="Close account menu">×</button>
+    </div>
+
+    <div class="account-sidebar-body">
+      <div class="account-user-card">
+        <div class="account-avatar" id="accountAvatar">?</div>
+        <h3 id="accountName">Loading...</h3>
+        <p id="accountEmail">Loading account...</p>
+      </div>
+
+      <div class="account-menu">
+        <button class="account-menu-btn" type="button" id="accountDetailsBtn">
+          <span class="account-menu-icon">
+            <svg viewBox="0 0 24 24">
+              <circle cx="12" cy="8" r="4"></circle>
+              <path d="M4 21c0-4.4 3.6-8 8-8s8 3.6 8 8"></path>
+            </svg>
+          </span>
+          <span>Account details</span>
+        </button>
+
+        <button class="account-menu-btn" type="button" id="accountLogoutBtn">
+          <span class="account-menu-icon">
+            <svg viewBox="0 0 24 24">
+              <path d="M10 17l5-5-5-5"></path>
+              <path d="M15 12H3"></path>
+              <path d="M21 3v18"></path>
+            </svg>
+          </span>
+          <span>Logout</span>
+        </button>
+
+        <button class="account-menu-btn danger" type="button" id="accountDeleteBtn">
+          <span class="account-menu-icon">
+            <svg viewBox="0 0 24 24">
+              <path d="M3 6h18"></path>
+              <path d="M8 6V4h8v2"></path>
+              <path d="M19 6l-1 15H6L5 6"></path>
+              <path d="M10 11v6M14 11v6"></path>
+            </svg>
+          </span>
+          <span>Delete account</span>
+        </button>
+      </div>
+    </div>
+
+    <div class="account-sidebar-foot">
+      Khatek Digital Tech Nig. · Your account
+    </div>
+  </aside>
+
+  <div class="account-toast" id="accountToast">
+    <div class="account-toast-icon" id="accountToastIcon">✓</div>
+    <h3 id="accountToastTitle">Done</h3>
+    <p id="accountToastText"></p>
+    <button class="account-toast-btn" id="accountToastBtn" type="button">Continue</button>
+  </div>
+
   <nav class="navbar" id="navbar">
     <div class="nav-inner">
       <a href="#home" class="brand" aria-label="Khatek Digital Tech home">
@@ -477,9 +932,13 @@
         <li><a class="nav-link" href="#programs">Programs</a></li>
         <li><a class="nav-link" href="#services">Services</a></li>
         <li><a class="nav-link" href="#contact">Contact</a></li>
-        <li class="nav-auth">
-          <a class="nav-link" href="./auth.html">Login</a>
-          <a class="nav-link auth-register" href="./auth.html?mode=register">Register</a>
+        <li class="nav-auth account-nav-auth">
+          <button class="account-profile-btn" id="accountProfileBtn" type="button" aria-label="Open account menu" aria-expanded="false">
+            <svg viewBox="0 0 24 24">
+              <circle cx="12" cy="8" r="4"></circle>
+              <path d="M4 21c0-4.4 3.6-8 8-8s8 3.6 8 8"></path>
+            </svg>
+          </button>
         </li>
       </ul>
     </div>
@@ -803,6 +1262,163 @@
       formMessage.classList.add("show");
       setTimeout(()=>{window.location.href="mailto:khatekdigitalservices@gmail.com?subject="+subject+"&body="+body},200);
     });
+
+    /* ===== LOGGED-IN ACCOUNT ===== */
+    const accountProfileBtn = document.getElementById("accountProfileBtn");
+    const accountSidebar = document.getElementById("accountSidebar");
+    const accountOverlay = document.getElementById("accountOverlay");
+    const accountClose = document.getElementById("accountClose");
+    const accountName = document.getElementById("accountName");
+    const accountEmail = document.getElementById("accountEmail");
+    const accountAvatar = document.getElementById("accountAvatar");
+    const accountLogoutBtn = document.getElementById("accountLogoutBtn");
+    const accountDeleteBtn = document.getElementById("accountDeleteBtn");
+    const accountDetailsBtn = document.getElementById("accountDetailsBtn");
+
+    const accountToast = document.getElementById("accountToast");
+    const accountToastIcon = document.getElementById("accountToastIcon");
+    const accountToastTitle = document.getElementById("accountToastTitle");
+    const accountToastText = document.getElementById("accountToastText");
+    const accountToastBtn = document.getElementById("accountToastBtn");
+
+    function openAccount(){
+      accountSidebar.classList.add("show");
+      accountOverlay.classList.add("show");
+      accountSidebar.setAttribute("aria-hidden","false");
+      accountProfileBtn.setAttribute("aria-expanded","true");
+      document.body.style.overflow="hidden";
+    }
+
+    function closeAccount(){
+      accountSidebar.classList.remove("show");
+      accountOverlay.classList.remove("show");
+      accountSidebar.setAttribute("aria-hidden","true");
+      accountProfileBtn.setAttribute("aria-expanded","false");
+      document.body.style.overflow="";
+    }
+
+    function showAccountToast(title,text,error=false,callback=null){
+      accountToastTitle.textContent=title;
+      accountToastText.textContent=text;
+      accountToast.classList.toggle("error",error);
+      accountToastIcon.textContent=error?"!":"✓";
+      accountToastBtn.textContent=callback?"Continue":"Close";
+      accountToast.classList.add("show");
+
+      const closeToast=()=>{
+        accountToast.classList.remove("show");
+        accountToastBtn.removeEventListener("click",closeToast);
+        if(callback) callback();
+      };
+      accountToastBtn.addEventListener("click",closeToast);
+    }
+
+    async function loadAccount(){
+      try{
+        const response=await fetch("./Api/account.php",{credentials:"include",cache:"no-store"});
+        const data=await response.json();
+
+        if(!data.success){
+          window.location.href="./auth.html";
+          return;
+        }
+
+        const user=data.user||data.account||data;
+        const name=user.name || user.full_name || user.fullName || "User";
+        const email=user.email || "";
+
+        accountName.textContent=name;
+        accountEmail.textContent=email;
+        accountAvatar.textContent=name.trim().charAt(0).toUpperCase() || "?";
+      }catch(error){
+        console.error("Account loading error:",error);
+        showAccountToast(
+          "Connection error",
+          "Unable to load your account. Make sure XAMPP Apache and MySQL are running.",
+          true
+        );
+      }
+    }
+
+    accountProfileBtn.addEventListener("click",openAccount);
+    accountClose.addEventListener("click",closeAccount);
+    accountOverlay.addEventListener("click",closeAccount);
+
+    document.addEventListener("keydown",e=>{
+      if(e.key==="Escape") closeAccount();
+    });
+
+    accountDetailsBtn.addEventListener("click",()=>{
+      closeAccount();
+      window.location.href="./account-details.html";
+    });
+
+    accountLogoutBtn.addEventListener("click",async()=>{
+      accountLogoutBtn.disabled=true;
+      accountLogoutBtn.querySelector("span:last-child").textContent="Logging out…";
+
+      try{
+        const response=await fetch("./Api/logout.php",{
+          method:"POST",
+          credentials:"include",
+          headers:{"Content-Type":"application/json"}
+        });
+        const data=await response.json();
+
+        if(data.success){
+          closeAccount();
+          showAccountToast(
+            "Logged out successfully",
+            "You have been safely signed out of your Khatek Digital Tech account.",
+            false,
+            ()=>window.location.href="./index.html"
+          );
+        }else{
+          showAccountToast("Logout failed",data.message||"Unable to log out.",true);
+        }
+      }catch(error){
+        showAccountToast("Connection error","Unable to contact the server.",true);
+      }finally{
+        accountLogoutBtn.disabled=false;
+        accountLogoutBtn.querySelector("span:last-child").textContent="Logout";
+      }
+    });
+
+    accountDeleteBtn.addEventListener("click",()=>{
+      closeAccount();
+
+      showAccountToast(
+        "Delete account?",
+        "This action permanently removes your account and cannot be undone.",
+        true,
+        async()=>{
+          try{
+            const response=await fetch("./Api/delete-account.php",{
+              method:"POST",
+              credentials:"include",
+              headers:{"Content-Type":"application/json"}
+            });
+            const data=await response.json();
+
+            if(data.success){
+              showAccountToast(
+                "Account deleted",
+                "Your Khatek Digital Tech account has been permanently deleted.",
+                false,
+                ()=>window.location.href="./index.html"
+              );
+            }else{
+              showAccountToast("Unable to delete",data.message||"The account could not be deleted.",true);
+            }
+          }catch(error){
+            showAccountToast("Connection error","Unable to contact the server.",true);
+          }
+        }
+      );
+    });
+
+    loadAccount();
+
   </script>
 </body>
 </html>

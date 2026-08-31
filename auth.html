@@ -1,0 +1,1821 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <meta name="description" content="Login or create your account at Khatek Digital Tech Nig.">
+  <title>Login / Register — Khatek Digital Tech Nig.</title>
+  <style>
+
+.auth-notification {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  z-index: 9999;
+
+  width: min(390px, calc(100% - 32px));
+  padding: 28px 24px;
+
+  background: rgba(255, 255, 255, 0.97);
+  backdrop-filter: blur(25px);
+  -webkit-backdrop-filter: blur(25px);
+
+  border: 1px solid rgba(255, 255, 255, .9);
+  border-radius: 24px;
+
+  text-align: center;
+
+  box-shadow:
+    0 30px 90px rgba(15, 23, 42, .22),
+    0 10px 30px rgba(15, 23, 42, .08);
+
+  opacity: 0;
+  visibility: hidden;
+
+  transform: translate(-50%, -45%) scale(.92);
+
+  transition:
+    opacity .3s ease,
+    transform .3s ease,
+    visibility .3s ease;
+}
+
+.auth-notification.show {
+  opacity: 1;
+  visibility: visible;
+  transform: translate(-50%, -50%) scale(1);
+}
+
+.auth-notification-icon {
+  width: 58px;
+  height: 58px;
+  margin: 0 auto 14px;
+
+  display: grid;
+  place-items: center;
+
+  border-radius: 50%;
+
+  background: #dcfce7;
+  color: #16a34a;
+
+  font-size: 27px;
+  font-weight: 800;
+}
+
+.auth-notification h3 {
+  font-size: 19px;
+  font-weight: 800;
+  margin-bottom: 6px;
+}
+
+.auth-notification p {
+  font-size: 13px;
+  color: var(--muted);
+  line-height: 1.55;
+}
+
+.auth-notification-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 9998;
+
+  background: rgba(15, 23, 42, .2);
+  backdrop-filter: blur(3px);
+
+  opacity: 0;
+  visibility: hidden;
+
+  transition: .3s ease;
+}
+
+.auth-notification-overlay.show {
+  opacity: 1;
+  visibility: visible;
+}
+
+    :root{
+      --navy:#0b1220;--blue:#2563eb;--violet:#7c3aed;--mint:#2dd4bf;
+      --ink:#0f172a;--muted:#64748b;--line:#e2e8f0;--bg:#f0f4fb;--white:#fff;
+      --radius:22px;--radius-lg:32px;--radius-pill:999px;
+      --shadow:0 12px 40px rgba(15,23,42,.08);--max:1100px;
+    }
+    *{box-sizing:border-box;margin:0;padding:0}
+    html{scroll-behavior:smooth;scrollbar-width:none;-ms-overflow-style:none}
+    html::-webkit-scrollbar{display:none}
+    body{
+      font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+      color:var(--ink);background:var(--bg);line-height:1.65;min-height:100vh;
+      overflow-x:hidden;scrollbar-width:none;-webkit-font-smoothing:antialiased;
+    }
+    body::-webkit-scrollbar{display:none}
+    a{text-decoration:none;color:inherit}
+    button,input{font:inherit}
+    img{max-width:100%;display:block}
+    .container{width:min(var(--max),calc(100% - 28px));margin:auto}
+
+    .glass{
+      background:rgba(255,255,255,.65);
+      backdrop-filter:blur(24px) saturate(180%);
+      -webkit-backdrop-filter:blur(24px) saturate(180%);
+      border:1px solid rgba(255,255,255,.75);
+      box-shadow:0 12px 40px rgba(15,23,42,.08),inset 0 1px 0 rgba(255,255,255,.85);
+    }
+
+    .navbar{
+      position:fixed;top:14px;left:0;right:0;z-index:1000;
+      display:flex;justify-content:center;padding:0 14px;pointer-events:none
+    }
+    .nav-inner{
+      pointer-events:auto;display:flex;align-items:center;justify-content:space-between;gap:12px;
+      width:min(var(--max),100%);padding:10px 14px 10px 18px;border-radius:var(--radius-pill);
+      background:rgba(255,255,255,.75);backdrop-filter:blur(24px) saturate(180%);
+      border:1px solid rgba(255,255,255,.85);box-shadow:0 10px 40px rgba(15,23,42,.1)
+    }
+    .brand{display:flex;align-items:center;gap:10px;font-weight:800}
+    .brand-logo{
+      width:38px;height:38px;border-radius:50%;
+      background:linear-gradient(135deg,var(--blue),var(--violet));
+      display:grid;place-items:center;overflow:hidden;color:#fff;font-weight:800;font-size:15px
+    }
+    .brand-logo img{width:100%;height:100%;object-fit:contain}
+    .brand span:last-child{font-size:14px}
+    .nav-links{display:flex;align-items:center;gap:2px;list-style:none}
+    .nav-link{padding:9px 13px;border-radius:var(--radius-pill);font-size:13px;font-weight:650;color:var(--muted);transition:.2s}
+    .nav-link:hover,.nav-link.active{color:var(--blue);background:rgba(37,99,235,.1)}
+    .nav-auth{display:flex;align-items:center;gap:6px;margin-left:6px}
+    .nav-auth .auth-register{
+      background:linear-gradient(135deg,var(--blue),#4f46e5);color:#fff!important;
+      padding:10px 18px;border-radius:var(--radius-pill);font-weight:700;
+      box-shadow:0 6px 20px rgba(37,99,235,.3)
+    }
+    .mobile-toggle{display:none;border:0;background:rgba(15,23,42,.06);width:42px;height:42px;border-radius:50%;cursor:pointer}
+    .mobile-toggle svg{width:20px;height:20px;fill:none;stroke:currentColor;stroke-width:2}
+
+    .auth-section{
+      min-height:100vh;padding:130px 0 60px;
+      display:flex;align-items:center;justify-content:center;
+      position:relative;overflow:hidden
+    }
+    .auth-section:before{
+      content:"";position:absolute;width:400px;height:400px;border-radius:50%;
+      background:radial-gradient(circle,rgba(37,99,235,.1),transparent 70%);
+      top:-100px;right:-80px;pointer-events:none
+    }
+    .auth-section:after{
+      content:"";position:absolute;width:280px;height:280px;border-radius:50%;
+      background:radial-gradient(circle,rgba(124,58,237,.08),transparent 70%);
+      bottom:-60px;left:-60px;pointer-events:none
+    }
+
+    .auth-wrap{
+      width:100%;max-width:420px;margin:0 auto;position:relative;z-index:1
+    }
+
+    .auth-card{
+      border-radius:var(--radius-lg);padding:36px 32px;text-align:center
+    }
+    .auth-tabs{
+      display:flex;gap:6px;background:rgba(241,245,249,.85);
+      border-radius:var(--radius-pill);padding:5px;margin-bottom:28px
+    }
+    .auth-tab{
+      flex:1;border:0;background:transparent;padding:12px 16px;border-radius:var(--radius-pill);
+      font-size:14px;font-weight:750;color:var(--muted);cursor:pointer;transition:.2s
+    }
+    .auth-tab.active{
+      background:#fff;color:var(--ink);box-shadow:0 4px 14px rgba(15,23,42,.08)
+    }
+    .auth-panel{display:none}
+    .auth-panel.active{display:block;animation:fadeUp .3s ease}
+    @keyframes fadeUp{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+    .auth-panel h2{font-size:24px;font-weight:800;margin-bottom:6px;letter-spacing:-.02em}
+    .auth-panel > p{font-size:14px;color:var(--muted);margin-bottom:24px}
+    .form-fields{display:grid;gap:14px;text-align:left}
+    .field{display:grid;gap:6px}
+    label{font-size:11px;font-weight:750;text-transform:uppercase;letter-spacing:.08em;color:var(--muted)}
+    .input-wrap{position:relative}
+    input{
+      width:100%;border:1.5px solid var(--line);background:rgba(248,250,252,.9);
+      border-radius:14px;padding:14px 16px;outline:0;color:var(--ink);transition:.2s
+    }
+    input:focus{border-color:var(--blue);background:#fff;box-shadow:0 0 0 4px rgba(37,99,235,.1)}
+    .toggle-pass{
+      position:absolute;right:12px;top:50%;transform:translateY(-50%);
+      border:0;background:transparent;color:#94a3b8;cursor:pointer;font-size:12px;font-weight:700
+    }
+    .toggle-pass:hover{color:var(--blue)}
+    .form-row{display:flex;align-items:center;justify-content:space-between;gap:12px}
+    .checkbox-label{display:flex;align-items:center;gap:8px;font-size:13px;color:var(--muted);cursor:pointer}
+    .checkbox-label input{width:16px;height:16px;accent-color:var(--blue)}
+    .forgot{font-size:13px;color:var(--blue);font-weight:650}
+    .forgot:hover{text-decoration:underline}
+    .btn{
+      display:inline-flex;align-items:center;justify-content:center;gap:8px;
+      min-height:52px;padding:0 22px;border-radius:var(--radius-pill);border:0;
+      font-size:14px;font-weight:750;cursor:pointer;width:100%;transition:.25s
+    }
+    .btn-primary{
+      background:linear-gradient(135deg,var(--blue),#4f46e5);color:#fff;
+      box-shadow:0 12px 32px rgba(37,99,235,.32);margin-top:6px
+    }
+    .btn-primary:hover{transform:translateY(-2px);box-shadow:0 16px 40px rgba(37,99,235,.4)}
+    .btn-primary:disabled{opacity:.7;cursor:not-allowed;transform:none}
+    .divider{display:flex;align-items:center;gap:14px;margin:18px 0;color:#94a3b8;font-size:12px}
+    .divider:before,.divider:after{content:"";flex:1;height:1px;background:var(--line)}
+    .social-btns{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+    .social-btn{
+      display:flex;align-items:center;justify-content:center;min-height:48px;
+      border:1.5px solid var(--line);border-radius:var(--radius-pill);
+      background:#fff;font-size:13px;font-weight:700;color:#334155;cursor:pointer;transition:.2s
+    }
+    .social-btn:hover{border-color:#bfdbfe;color:var(--blue)}
+    .form-message{
+      display:none;padding:12px 14px;border-radius:14px;font-size:13px;font-weight:650;margin-bottom:12px;text-align:left
+    }
+    .form-message.show{display:block}
+    .form-message.success{background:#ecfdf5;color:#047857}
+    .form-message.error{background:#fef2f2;color:#b91c1c}
+    .form-message.info{background:#eff6ff;color:#1d4ed8}
+    .auth-footer-note{margin-top:18px;font-size:13px;color:var(--muted)}
+    .auth-footer-note a{color:var(--blue);font-weight:700}
+    .auth-footer-note a:hover{text-decoration:underline}
+
+    .footer{background:var(--navy);color:#fff;padding:48px 0 24px}
+    .footer-grid{display:grid;grid-template-columns:1.3fr 1fr 1fr;gap:28px}
+    .footer .brand{margin-bottom:12px}
+    .footer .brand-logo{background:linear-gradient(135deg,var(--blue),var(--violet))}
+    .footer .brand span:last-child{color:#fff}
+    .footer p{font-size:13px;color:#94a3b8;max-width:260px}
+    .footer h3{font-size:12px;text-transform:uppercase;letter-spacing:.1em;margin-bottom:12px}
+    .footer ul{list-style:none;display:grid;gap:8px}
+    .footer li a{font-size:13px;color:#94a3b8}
+    .footer li a:hover{color:#93c5fd}
+    .footer-bottom{
+      margin-top:32px;padding-top:16px;border-top:1px solid rgba(255,255,255,.08);
+      display:flex;justify-content:space-between;gap:12px;font-size:12px;color:#64748b
+    }
+
+    .reveal{opacity:0;transform:translateY(18px);transition:opacity .6s ease,transform .6s ease}
+    .reveal.visible{opacity:1;transform:none}
+
+    @media(max-width:768px){
+      .container{width:min(var(--max),calc(100% - 22px))}
+      .navbar{top:10px;padding:0 10px}
+      .nav-inner{padding:8px 10px 8px 14px;border-radius:24px}
+      .mobile-toggle{display:grid;place-items:center}
+      .nav-links{
+        position:fixed;top:0;left:0;right:0;bottom:0;
+        background:rgba(255,255,255,.96);backdrop-filter:blur(28px);
+        flex-direction:column;align-items:stretch;padding:90px 22px 40px;gap:6px;
+        opacity:0;visibility:hidden;transform:translateY(-16px);transition:.3s;z-index:998
+      }
+      .nav-links.open{opacity:1;visibility:visible;transform:none;display:flex}
+      .nav-link{padding:16px 18px;font-size:16px;border-radius:16px;text-align:center}
+      .nav-auth{flex-direction:column;margin:12px 0 0;padding-top:14px;border-top:1px solid var(--line);gap:10px}
+      .nav-auth .auth-register{text-align:center;padding:14px}
+      .brand span:last-child{font-size:13px}
+      .auth-section{padding:110px 0 48px}
+      .auth-card{padding:28px 22px}
+      .social-btns{grid-template-columns:1fr}
+      .footer-grid{grid-template-columns:1fr;text-align:center;gap:24px}
+      .footer p{margin:0 auto}
+      .footer-bottom{flex-direction:column;align-items:center}
+    }
+  </style>
+</head>
+<body>
+
+<!-- REGISTRATION SUCCESS NOTIFICATION -->
+
+<div class="auth-notification-overlay" id="authNotificationOverlay"></div>
+
+<div class="auth-notification" id="authNotification">
+
+  <div class="auth-notification-icon">
+    ✓
+  </div>
+
+  <h3 id="authNotificationTitle">
+    Registered successfully
+  </h3>
+
+  <p id="authNotificationText">
+    Your account has been created successfully.
+  </p>
+
+</div>
+
+  <nav class="navbar">
+    <div class="nav-inner">
+      <a href="./index.html" class="brand">
+        <span class="brand-logo"><img src="./logo.png" alt="" onerror="this.remove()"></span>
+        <span>Khatek Digital Tech</span>
+      </a>
+      <button class="mobile-toggle" id="mobileToggle" aria-label="Open menu" aria-expanded="false">
+        <svg viewBox="0 0 24 24"><path d="M4 7h16M4 12h16M4 17h16"/></svg>
+      </button>
+      <ul class="nav-links" id="navLinks">
+        <li><a class="nav-link" href="./index.html">Home</a></li>
+        <li><a class="nav-link" href="./index.html#about">About</a></li>
+        <li><a class="nav-link" href="./kids-coding.html">Bootcamp</a></li>
+        <li><a class="nav-link" href="./index.html#programs">Programs</a></li>
+        <li><a class="nav-link" href="./index.html#contact">Contact</a></li>
+        <li class="nav-auth">
+          <a class="nav-link active" href="./auth.html">Login</a>
+          <a class="nav-link auth-register" href="./auth.html?mode=register">Register</a>
+        </li>
+      </ul>
+    </div>
+  </nav>
+
+  <main>
+    <section class="auth-section">
+      <div class="auth-wrap">
+        <div class="auth-card glass reveal">
+          <div class="auth-tabs">
+            <button type="button" class="auth-tab active" id="tabLogin">Sign In</button>
+            <button type="button" class="auth-tab" id="tabRegister">Sign Up</button>
+          </div>
+
+          <div class="auth-panel active" id="panelLogin">
+            <h2>Welcome back</h2>
+            <p>Sign in to continue.</p>
+            <div class="form-message" id="loginMessage"></div>
+            <form id="loginForm" class="form-fields">
+              <div class="field">
+                <label for="loginEmail">Email</label>
+                <input id="loginEmail" type="email" placeholder="your@email.com" required>
+              </div>
+              <div class="field">
+                <label for="loginPassword">Password</label>
+                <div class="input-wrap">
+                  <input id="loginPassword" type="password" placeholder="••••••••" required>
+                  <button type="button" class="toggle-pass" data-target="loginPassword">Show</button>
+                </div>
+              </div>
+              <div class="form-row">
+                <label class="checkbox-label"><input type="checkbox"> Remember me</label>
+                <a href="#" class="forgot" id="forgotLink">Forgot password?</a>
+              </div>
+              <button type="submit" class="btn btn-primary" id="loginBtn">Sign In →</button>
+            </form>
+            <div class="divider">or continue with</div>
+            <div class="social-btns">
+              <button type="button" class="social-btn" id="googleLogin">Google</button>
+              <button type="button" class="social-btn" id="whatsappLogin">WhatsApp</button>
+            </div>
+            <p class="auth-footer-note">New here? <a href="#" id="switchToRegister">Create an account</a></p>
+          </div>
+
+          <div class="auth-panel" id="panelRegister">
+            <h2>Create account</h2>
+            <p>Join Khatek Digital Tech Nig.</p>
+            <div class="form-message" id="registerMessage"></div>
+            <form id="registerForm" class="form-fields">
+              <div class="field">
+                <label for="regName">Full name</label>
+                <input id="regName" type="text" placeholder="Your full name" required>
+              </div>
+              <div class="field">
+                <label for="regEmail">Email</label>
+                <input id="regEmail" type="email" placeholder="your@email.com" required>
+              </div>
+              <div class="field">
+                <label for="regPhone">Phone</label>
+                <input id="regPhone" type="tel" placeholder="+234 or 09..." required>
+              </div>
+              <div class="field">
+                <label for="regPassword">Password</label>
+                <div class="input-wrap">
+                  <input id="regPassword" type="password" placeholder="Min. 8 characters" required minlength="8">
+                  <button type="button" class="toggle-pass" data-target="regPassword">Show</button>
+                </div>
+              </div>
+              <div class="field">
+                <label for="regConfirm">Confirm password</label>
+                <div class="input-wrap">
+                  <input id="regConfirm" type="password" placeholder="Repeat password" required minlength="8">
+                  <button type="button" class="toggle-pass" data-target="regConfirm">Show</button>
+                </div>
+              </div>
+              <button type="submit" class="btn btn-primary" id="registerBtn">Sign Up →</button>
+            </form>
+            <div class="divider">or continue with</div>
+            <div class="social-btns">
+              <button type="button" class="social-btn" id="googleRegister">Google</button>
+              <button type="button" class="social-btn" id="whatsappRegister">WhatsApp</button>
+            </div>
+            <p class="auth-footer-note">Already have an account? <a href="#" id="switchToLogin">Sign in</a></p>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-grid">
+        <div>
+          <a href="./index.html" class="brand">
+            <span class="brand-logo"><img src="./logo.png" alt="" onerror="this.remove()"></span>
+            <span>Khatek Digital Tech</span>
+          </a>
+          <p>Empowering learners with practical digital skills.</p>
+        </div>
+        <div>
+          <h3>Explore</h3>
+          <ul>
+            <li><a href="./index.html#about">About</a></li>
+            <li><a href="./index.html#programs">Programs</a></li>
+            <li><a href="./index.html#contact">Contact</a></li>
+          </ul>
+        </div>
+        <div>
+          <h3>Contact</h3>
+          <ul>
+            <li><a href="tel:+2347036016234">+234 703 601 6234</a></li>
+            <li><a href="mailto:khatekdigitalservices@gmail.com">Email us</a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <span>© <span id="year"></span> Khatek Digital Tech Nig.</span>
+        <span>Digital skills. Real solutions.</span>
+      </div>
+    </div>
+  </footer>
+
+
+<script>
+  /* =========================================================
+     KHATEK DIGITAL TECH — AUTH SYSTEM
+     PHP + MYSQL VERSION
+  ========================================================= */
+
+
+  /* =========================================================
+     PAGE SETUP
+  ========================================================= */
+
+  const yearElement = document.getElementById("year");
+
+  if (yearElement) {
+    yearElement.textContent = new Date().getFullYear();
+  }
+
+
+  /* =========================================================
+     MOBILE MENU
+  ========================================================= */
+
+  const mobileToggle = document.getElementById("mobileToggle");
+  const navLinks = document.getElementById("navLinks");
+
+  function setMenu(open) {
+
+    if (!mobileToggle || !navLinks) return;
+
+    navLinks.classList.toggle("open", open);
+
+    mobileToggle.setAttribute(
+      "aria-expanded",
+      String(open)
+    );
+
+    mobileToggle.innerHTML = open
+      ? `
+        <svg viewBox="0 0 24 24">
+          <path d="M6 6l12 12M18 6L6 18"/>
+        </svg>
+      `
+      : `
+        <svg viewBox="0 0 24 24">
+          <path d="M4 7h16M4 12h16M4 17h16"/>
+        </svg>
+      `;
+
+    document.body.style.overflow =
+      open ? "hidden" : "";
+  }
+
+
+  if (mobileToggle) {
+
+    mobileToggle.addEventListener("click", () => {
+
+      const isOpen =
+        navLinks.classList.contains("open");
+
+      setMenu(!isOpen);
+
+    });
+
+  }
+
+
+  document.querySelectorAll(".nav-link").forEach(link => {
+
+    link.addEventListener("click", () => {
+
+      setMenu(false);
+
+    });
+
+  });
+
+
+  /* =========================================================
+     REVEAL ANIMATION
+  ========================================================= */
+
+  document.querySelectorAll(".reveal").forEach(element => {
+
+    const observer =
+      new IntersectionObserver(entries => {
+
+        entries.forEach(entry => {
+
+          if (entry.isIntersecting) {
+
+            entry.target.classList.add("visible");
+
+            observer.unobserve(entry.target);
+
+          }
+
+        });
+
+      }, {
+        threshold: 0.1
+      });
+
+    observer.observe(element);
+
+  });
+
+
+  /* =========================================================
+     AUTH TABS
+  ========================================================= */
+
+  const tabLogin =
+    document.getElementById("tabLogin");
+
+  const tabRegister =
+    document.getElementById("tabRegister");
+
+  const panelLogin =
+    document.getElementById("panelLogin");
+
+  const panelRegister =
+    document.getElementById("panelRegister");
+
+
+  function showLogin() {
+
+    if (!tabLogin || !tabRegister ||
+        !panelLogin || !panelRegister) {
+      return;
+    }
+
+    tabLogin.classList.add("active");
+    tabRegister.classList.remove("active");
+
+    panelLogin.classList.add("active");
+    panelRegister.classList.remove("active");
+
+    history.replaceState(
+      null,
+      "",
+      "./auth.html"
+    );
+
+  }
+
+
+  function showRegister() {
+
+    if (!tabLogin || !tabRegister ||
+        !panelLogin || !panelRegister) {
+      return;
+    }
+
+    tabRegister.classList.add("active");
+    tabLogin.classList.remove("active");
+
+    panelRegister.classList.add("active");
+    panelLogin.classList.remove("active");
+
+    history.replaceState(
+      null,
+      "",
+      "./auth.html?mode=register"
+    );
+
+  }
+
+
+  if (tabLogin) {
+    tabLogin.addEventListener(
+      "click",
+      showLogin
+    );
+  }
+
+
+  if (tabRegister) {
+    tabRegister.addEventListener(
+      "click",
+      showRegister
+    );
+  }
+
+
+  const switchToRegister =
+    document.getElementById("switchToRegister");
+
+  if (switchToRegister) {
+
+    switchToRegister.addEventListener(
+      "click",
+      event => {
+
+        event.preventDefault();
+
+        showRegister();
+
+      }
+    );
+
+  }
+
+
+  const switchToLogin =
+    document.getElementById("switchToLogin");
+
+  if (switchToLogin) {
+
+    switchToLogin.addEventListener(
+      "click",
+      event => {
+
+        event.preventDefault();
+
+        showLogin();
+
+      }
+    );
+
+  }
+
+
+  /* Open register automatically with ?mode=register */
+
+  const urlParams =
+    new URLSearchParams(window.location.search);
+
+  if (urlParams.get("mode") === "register") {
+
+    showRegister();
+
+  }
+
+
+  /* =========================================================
+     PASSWORD SHOW / HIDE
+  ========================================================= */
+
+  document.querySelectorAll(".toggle-pass").forEach(button => {
+
+    button.addEventListener("click", () => {
+
+      const targetId =
+        button.dataset.target;
+
+      const input =
+        document.getElementById(targetId);
+
+      if (!input) return;
+
+      const isPassword =
+        input.type === "password";
+
+      input.type =
+        isPassword ? "text" : "password";
+
+      button.textContent =
+        isPassword ? "Hide" : "Show";
+
+    });
+
+  });
+
+
+  /* =========================================================
+     FORM MESSAGE
+  ========================================================= */
+
+  function showMsg(element, text, type) {
+
+    if (!element) return;
+
+    element.textContent = text;
+
+    element.className =
+      "form-message show " + type;
+
+  }
+
+
+  function clearMsg(element) {
+
+    if (!element) return;
+
+    element.textContent = "";
+
+    element.className =
+      "form-message";
+
+  }
+
+
+  /* =========================================================
+     CENTER AUTH NOTIFICATION
+  ========================================================= */
+
+  const authNotification =
+    document.getElementById("authNotification");
+
+  const authNotificationOverlay =
+    document.getElementById(
+      "authNotificationOverlay"
+    );
+
+  const authNotificationIcon =
+    document.getElementById(
+      "authNotificationIcon"
+    );
+
+  const authNotificationTitle =
+    document.getElementById(
+      "authNotificationTitle"
+    );
+
+  const authNotificationText =
+    document.getElementById(
+      "authNotificationText"
+    );
+
+  const authNotificationClose =
+    document.getElementById(
+      "authNotificationClose"
+    );
+
+  let notificationTimer = null;
+
+
+  function showAuthNotification(
+    title,
+    text,
+    type = "success",
+    icon = "✓"
+  ) {
+
+    if (
+      !authNotification ||
+      !authNotificationOverlay
+    ) {
+
+      console.warn(
+        "Auth notification HTML was not found."
+      );
+
+      return;
+
+    }
+
+
+    clearTimeout(notificationTimer);
+
+
+    if (authNotificationTitle) {
+
+      authNotificationTitle.textContent =
+        title;
+
+    }
+
+
+    if (authNotificationText) {
+
+      authNotificationText.textContent =
+        text;
+
+    }
+
+
+    if (authNotificationIcon) {
+
+      authNotificationIcon.textContent =
+        icon;
+
+    }
+
+
+    authNotification.classList.remove(
+      "success",
+      "error",
+      "info"
+    );
+
+
+    authNotification.classList.add(type);
+
+    authNotification.classList.add("show");
+
+    authNotificationOverlay.classList.add(
+      "show"
+    );
+
+
+    document.body.style.overflow = "hidden";
+
+  }
+
+
+  function hideAuthNotification() {
+
+    if (authNotification) {
+
+      authNotification.classList.remove(
+        "show"
+      );
+
+    }
+
+
+    if (authNotificationOverlay) {
+
+      authNotificationOverlay.classList.remove(
+        "show"
+      );
+
+    }
+
+
+    document.body.style.overflow = "";
+
+
+    clearTimeout(notificationTimer);
+
+  }
+
+
+  function showTemporaryNotification(
+    title,
+    text,
+    type = "success",
+    icon = "✓",
+    duration = 1800
+  ) {
+
+    showAuthNotification(
+      title,
+      text,
+      type,
+      icon
+    );
+
+
+    notificationTimer = setTimeout(() => {
+
+      hideAuthNotification();
+
+    }, duration);
+
+  }
+
+
+  if (authNotificationOverlay) {
+
+    authNotificationOverlay.addEventListener(
+      "click",
+      hideAuthNotification
+    );
+
+  }
+
+
+  if (authNotificationClose) {
+
+    authNotificationClose.addEventListener(
+      "click",
+      hideAuthNotification
+    );
+
+  }
+
+
+  /* =========================================================
+     LOGIN FORM
+     PHP + MYSQL
+  ========================================================= */
+
+  const loginForm =
+    document.getElementById("loginForm");
+
+  if (loginForm) {
+
+    loginForm.addEventListener(
+      "submit",
+      async event => {
+
+        event.preventDefault();
+
+
+        const email =
+          document.getElementById(
+            "loginEmail"
+          ).value.trim();
+
+        const password =
+          document.getElementById(
+            "loginPassword"
+          ).value;
+
+        const message =
+          document.getElementById(
+            "loginMessage"
+          );
+
+        const button =
+          document.getElementById(
+            "loginBtn"
+          );
+
+
+        clearMsg(message);
+
+
+        /* Validation */
+
+        if (!email || !password) {
+
+          showTemporaryNotification(
+            "Missing information",
+            "Please enter your email and password.",
+            "error",
+            "!"
+          );
+
+          showMsg(
+            message,
+            "Please enter your email and password.",
+            "error"
+          );
+
+          return;
+
+        }
+
+
+        if (button) {
+
+          button.disabled = true;
+
+          button.textContent =
+            "Signing in…";
+
+        }
+
+
+        try {
+
+          const response =
+            await fetch(
+              "./Api/login.php",
+              {
+                method: "POST",
+
+                headers: {
+                  "Content-Type":
+                    "application/json"
+                },
+
+                credentials: "include",
+
+                body: JSON.stringify({
+                  email: email,
+                  password: password
+                })
+              }
+            );
+
+
+          /*
+             Try to decode PHP response.
+          */
+
+          let result;
+
+          try {
+
+            result =
+              await response.json();
+
+          } catch (jsonError) {
+
+            throw new Error(
+              "Invalid response from server."
+            );
+
+          }
+
+
+          /* =================================================
+             ACCOUNT NOT FOUND
+          ================================================= */
+
+          if (
+            result.error ===
+            "account_not_found"
+          ) {
+
+            showTemporaryNotification(
+              "Account not found",
+              "No registered account was found with this email.",
+              "error",
+              "!"
+            );
+
+
+            showMsg(
+              message,
+              "No registered account was found with this email.",
+              "error"
+            );
+
+
+            return;
+
+          }
+
+
+          /* =================================================
+             INCORRECT PASSWORD
+          ================================================= */
+
+          if (
+            result.error ===
+            "incorrect_password"
+          ) {
+
+            showTemporaryNotification(
+              "Incorrect password",
+              "The password you entered is incorrect. Please try again.",
+              "error",
+              "!"
+            );
+
+
+            showMsg(
+              message,
+              "Incorrect password. Please try again.",
+              "error"
+            );
+
+
+            const passwordInput =
+              document.getElementById(
+                "loginPassword"
+              );
+
+            if (passwordInput) {
+
+              passwordInput.select();
+
+            }
+
+
+            return;
+
+          }
+
+
+          /* =================================================
+             OTHER SERVER ERRORS
+          ================================================= */
+
+          if (
+            !response.ok ||
+            !result.success
+          ) {
+
+            showTemporaryNotification(
+              "Login failed",
+              result.message ||
+              "Something went wrong. Please try again.",
+              "error",
+              "!"
+            );
+
+
+            showMsg(
+              message,
+              result.message ||
+              "Login failed. Please try again.",
+              "error"
+            );
+
+
+            return;
+
+          }
+
+
+          /* =================================================
+             LOGIN SUCCESS
+          ================================================= */
+
+          const userName =
+            result.user &&
+            result.user.name
+              ? result.user.name
+              : "Welcome back";
+
+
+          showTemporaryNotification(
+            "Login successful",
+            `Welcome back, ${userName}. Redirecting you now…`,
+            "success",
+            "✓",
+            1300
+          );
+
+
+          showMsg(
+            message,
+            "Login successful. Redirecting…",
+            "success"
+          );
+
+
+          /* Redirect */
+
+          setTimeout(() => {
+
+           setTimeout(() => {
+    window.location.href = "./account-index.html";
+}, 1300);
+
+          }, 1300);
+
+
+        } catch (error) {
+
+          console.error(
+            "Login error:",
+            error
+          );
+
+
+          showTemporaryNotification(
+            "Connection error",
+            "Unable to connect to the server. Make sure XAMPP Apache and MySQL are running.",
+            "error",
+            "!"
+          );
+
+
+          showMsg(
+            message,
+            "Unable to connect to the server. Make sure XAMPP Apache and MySQL are running.",
+            "error"
+          );
+
+
+        } finally {
+
+          if (button) {
+
+            button.disabled = false;
+
+            button.textContent =
+              "Sign In →";
+
+          }
+
+        }
+
+      }
+    );
+
+  }
+
+
+  /* =========================================================
+     REGISTER FORM
+     PHP + MYSQL
+  ========================================================= */
+
+  const registerForm =
+    document.getElementById(
+      "registerForm"
+    );
+
+
+  if (registerForm) {
+
+    registerForm.addEventListener(
+      "submit",
+      async event => {
+
+        event.preventDefault();
+
+
+        const name =
+          document.getElementById(
+            "regName"
+          ).value.trim();
+
+        const email =
+          document.getElementById(
+            "regEmail"
+          ).value.trim();
+
+        const phone =
+          document.getElementById(
+            "regPhone"
+          ).value.trim();
+
+        const password =
+          document.getElementById(
+            "regPassword"
+          ).value;
+
+        const confirmPassword =
+          document.getElementById(
+            "regConfirm"
+          ).value;
+
+        const message =
+          document.getElementById(
+            "registerMessage"
+          );
+
+        const button =
+          document.getElementById(
+            "registerBtn"
+          );
+
+
+        clearMsg(message);
+
+
+        /* =================================================
+           VALIDATION
+        ================================================= */
+
+        if (
+          !name ||
+          !email ||
+          !phone ||
+          !password ||
+          !confirmPassword
+        ) {
+
+          showTemporaryNotification(
+            "Missing information",
+            "Please complete all fields.",
+            "error",
+            "!"
+          );
+
+
+          showMsg(
+            message,
+            "Please complete all fields.",
+            "error"
+          );
+
+
+          return;
+
+        }
+
+
+        /* Name */
+
+        if (name.length < 2) {
+
+          showTemporaryNotification(
+            "Invalid name",
+            "Please enter your full name.",
+            "error",
+            "!"
+          );
+
+
+          showMsg(
+            message,
+            "Please enter your full name.",
+            "error"
+          );
+
+
+          return;
+
+        }
+
+
+        /* Email */
+
+        const emailPattern =
+          /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+
+        if (!emailPattern.test(email)) {
+
+          showTemporaryNotification(
+            "Invalid email",
+            "Please enter a valid email address.",
+            "error",
+            "!"
+          );
+
+
+          showMsg(
+            message,
+            "Please enter a valid email address.",
+            "error"
+          );
+
+
+          return;
+
+        }
+
+
+        /* Phone */
+
+        if (phone.length < 7) {
+
+          showTemporaryNotification(
+            "Invalid phone number",
+            "Please enter a valid phone number.",
+            "error",
+            "!"
+          );
+
+
+          showMsg(
+            message,
+            "Please enter a valid phone number.",
+            "error"
+          );
+
+
+          return;
+
+        }
+
+
+        /* Password */
+
+        if (password.length < 8) {
+
+          showTemporaryNotification(
+            "Password too short",
+            "Password must be at least 8 characters.",
+            "error",
+            "!"
+          );
+
+
+          showMsg(
+            message,
+            "Password must be at least 8 characters.",
+            "error"
+          );
+
+
+          return;
+
+        }
+
+
+        /* Confirm password */
+
+        if (
+          password !== confirmPassword
+        ) {
+
+          showTemporaryNotification(
+            "Passwords don't match",
+            "Please make sure both passwords are the same.",
+            "error",
+            "!"
+          );
+
+
+          showMsg(
+            message,
+            "Passwords do not match.",
+            "error"
+          );
+
+
+          return;
+
+        }
+
+
+        /* =================================================
+           SEND TO PHP
+        ================================================= */
+
+        if (button) {
+
+          button.disabled = true;
+
+          button.textContent =
+            "Creating account…";
+
+        }
+
+
+        try {
+
+          const response =
+            await fetch(
+              "./Api/register.php",
+              {
+                method: "POST",
+
+                headers: {
+                  "Content-Type":
+                    "application/json"
+                },
+
+                credentials: "include",
+
+                body: JSON.stringify({
+
+                  name: name,
+
+                  email: email,
+
+                  phone: phone,
+
+                  password: password
+
+                })
+
+              }
+            );
+
+
+          /*
+             Decode PHP response.
+          */
+
+          let result;
+
+          try {
+
+            result =
+              await response.json();
+
+          } catch (jsonError) {
+
+            throw new Error(
+              "Invalid response from server."
+            );
+
+          }
+
+
+          /* =================================================
+             EMAIL ALREADY EXISTS
+          ================================================= */
+
+          if (
+            result.error ===
+            "email_exists"
+          ) {
+
+            showTemporaryNotification(
+              "Account already exists",
+              "An account with this email is already registered.",
+              "error",
+              "!"
+            );
+
+
+            showMsg(
+              message,
+              "An account with this email already exists.",
+              "error"
+            );
+
+
+            return;
+
+          }
+
+
+          /* =================================================
+             OTHER REGISTRATION ERRORS
+          ================================================= */
+
+          if (
+            !response.ok ||
+            !result.success
+          ) {
+
+            showTemporaryNotification(
+              "Registration failed",
+              result.message ||
+              "Unable to create your account.",
+              "error",
+              "!"
+            );
+
+
+            showMsg(
+              message,
+              result.message ||
+              "Unable to create your account.",
+              "error"
+            );
+
+
+            return;
+
+          }
+
+
+          /* =================================================
+             REGISTERED SUCCESSFULLY
+          ================================================= */
+
+          showTemporaryNotification(
+            "Registered successfully",
+            "Your account has been created successfully. You can now sign in.",
+            "success",
+            "✓",
+            1800
+          );
+
+
+          showMsg(
+            message,
+            "Account created successfully. You can now sign in.",
+            "success"
+          );
+
+
+          /* Clear registration form */
+
+          registerForm.reset();
+
+
+          /*
+             Switch to login after notification.
+          */
+
+          setTimeout(() => {
+
+            hideAuthNotification();
+
+            showLogin();
+
+
+            const loginEmail =
+              document.getElementById(
+                "loginEmail"
+              );
+
+            const loginPassword =
+              document.getElementById(
+                "loginPassword"
+              );
+
+
+            if (loginEmail) {
+
+              loginEmail.value =
+                email;
+
+            }
+
+
+            if (loginPassword) {
+
+              loginPassword.value =
+                "";
+
+              loginPassword.focus();
+
+            }
+
+          }, 1800);
+
+
+        } catch (error) {
+
+          console.error(
+            "Registration error:",
+            error
+          );
+
+
+          showTemporaryNotification(
+            "Connection error",
+            "Unable to connect to the server. Make sure XAMPP Apache and MySQL are running.",
+            "error",
+            "!"
+          );
+
+
+          showMsg(
+            message,
+            "Unable to connect to the server. Make sure XAMPP Apache and MySQL are running.",
+            "error"
+          );
+
+
+        } finally {
+
+          if (button) {
+
+            button.disabled = false;
+
+            button.textContent =
+              "Sign Up →";
+
+          }
+
+        }
+
+      }
+    );
+
+  }
+
+
+  /* =========================================================
+     FORGOT PASSWORD
+  ========================================================= */
+
+  const forgotLink =
+    document.getElementById(
+      "forgotLink"
+    );
+
+
+  if (forgotLink) {
+
+    forgotLink.addEventListener(
+      "click",
+      event => {
+
+        event.preventDefault();
+
+
+        const email =
+          document.getElementById(
+            "loginEmail"
+          ).value.trim();
+
+
+        const message =
+          document.getElementById(
+            "loginMessage"
+          );
+
+
+        if (!email) {
+
+          showTemporaryNotification(
+            "Enter your email",
+            "Enter your email address first.",
+            "info",
+            "i"
+          );
+
+
+          showMsg(
+            message,
+            "Enter your email address first.",
+            "info"
+          );
+
+
+          document.getElementById(
+            "loginEmail"
+          ).focus();
+
+
+          return;
+
+        }
+
+
+        showTemporaryNotification(
+          "Password reset",
+          "Password reset will be available once email verification is configured.",
+          "info",
+          "i"
+        );
+
+
+        showMsg(
+          message,
+          "Password reset will be available once email verification is configured.",
+          "info"
+        );
+
+      }
+    );
+
+  }
+
+
+  /* =========================================================
+     SOCIAL LOGIN BUTTONS
+  ========================================================= */
+
+  const socialButtons = [
+
+    "googleLogin",
+    "whatsappLogin",
+    "googleRegister",
+    "whatsappRegister"
+
+  ];
+
+
+  socialButtons.forEach(id => {
+
+    const button =
+      document.getElementById(id);
+
+    if (!button) return;
+
+
+    button.addEventListener(
+      "click",
+      () => {
+
+        const isLogin =
+          id.includes("Login");
+
+
+        const message =
+          document.getElementById(
+            isLogin
+              ? "loginMessage"
+              : "registerMessage"
+          );
+
+
+        showTemporaryNotification(
+          "Coming soon",
+          "Social sign-in is not connected yet. Please use email and password.",
+          "info",
+          "i"
+        );
+
+
+        showMsg(
+          message,
+          "Social sign-in is not connected yet. Please use email and password.",
+          "info"
+        );
+
+      }
+    );
+
+  });
+
+
+  /* =========================================================
+     PREVENT NOTIFICATION FROM BREAKING PAGE SCROLL
+  ========================================================= */
+
+  window.addEventListener(
+    "beforeunload",
+    () => {
+
+      document.body.style.overflow = "";
+
+    }
+  );
+
+</script>
+
+
+</body>
+</html>
