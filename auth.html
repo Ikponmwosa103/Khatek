@@ -1172,27 +1172,30 @@
           }, 1300);
 
 
-        } catch (error) {
+} catch (error) {
 
-          console.error(
-            "Login error:",
-            error
-          );
-
-
-          showTemporaryNotification(
-            "Connection error",
-            "Unable to connect to the server. Make sure XAMPP Apache and MySQL are running.",
-            "error",
-            "!"
-          );
+           console.error(
+             "Login error:",
+             error
+           );
 
 
-          showMsg(
-            message,
-            "Unable to connect to the server. Make sure XAMPP Apache and MySQL are running.",
-            "error"
-          );
+           showTemporaryNotification(
+             "Connection error",
+             "Unable to connect to the server. Please check your internet connection and try again.",
+             "error",
+             "!"
+           );
+
+
+           showMsg(
+             message,
+             "Unable to connect to the server. Please try again later.",
+             "error"
+           );
+
+
+         }
 
 
         } finally {
