@@ -2,8 +2,8 @@ FROM php:8.3-apache
 
 WORKDIR /var/www/html
 
-# Apache configuration & dynamic port binding for Railway
-RUN a2dismod mpm_event mpm_worker mpm_shared 2>/dev/null || true \
+# Disable conflicting MPM modules explicitly before enabling prefork
+RUN a2dismod mpm_event mpm_worker 2>/dev/null || true \
     && a2enmod mpm_prefork rewrite headers expires deflate \
     && sed -ri 's/AllowOverride None/AllowOverride All/g' /etc/apache2/apache2.conf \
     && echo "ServerName localhost" >> /etc/apache2/apache2.conf \
