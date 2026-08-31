@@ -1,0 +1,39 @@
+# Place this in your project root's public/ folder (or /var/www/html if no public/ subdir)
+# If your DocumentRoot IS /var/www/html/public, move this file there.
+
+<IfModule mod_rewrite.c>
+    RewriteEngine On
+
+    # Redirect to HTTPS if behind Railway proxy (X-Forwarded-Proto)
+    # Uncomment if you want to force HTTPS:
+    # RewriteCond %{HTTP:X-Forwarded-Proto} !https
+    # RewriteRule ^ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
+
+    # Send all non-file/directory requests through index.php (common for Laravel/Slim)
+    # If you serve plain PHP files, you can remove the fallback rule:
+    RewriteCond %{REQUEST_FILENAME} !-f
+    RewriteCond %{REQUEST_FILENAME} !-d
+    RewriteRule ^ index.php [L]
+</IfModule>
+
+# Caching & compression (requires expires + deflate which the optimized Dockerfile enables)
+<IfModule mod_expires.c>
+    ExpiresActive On
+    ExpiresByType image/jpg "access plus 1 year"
+    ExpiresByType image/jpeg "access plus 1 year"
+    ExpiresByType image/gif "access plus 1 year"
+    ExpiresByType image/png "access plus 1 year"
+    ExpiresByType text/css "access plus 1 month"
+    ExpiresByType application/javascript "access plus 1 month"
+</IfModule>
+
+<IfModule mod_deflate.c>
+    AddOutputFilterByType DEFLATE text/html text/plain text/xml text/css application/javascript application/json
+</IfModule>
+
+# Protect sensitive files
+<FilesMatch "^\.env|\.git|composer\.(json|lock)">
+    Require all denied
+</FilesMatch>
+
+Options -Indexes
