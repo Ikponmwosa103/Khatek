@@ -1,36 +1,52 @@
-# Use official PHP with Apache base image
-FROM php:8.2-apache
+# Version control
+.git
+.gitignore
+.github
 
-# Install system dependencies and required PHP extensions
-RUN apt-get update && apt-get install -y \
-    libpng-dev \
-    libjpeg-dev \
-    libfreetype6-dev \
-    zip \
-    unzip \
-    git \
-    && docker-php-ext-configure gd --with-freetype --with-jpeg \
-    && docker-php-ext-install -j$(nproc) gd pdo pdo_mysql mysqli
+# Docker
+Dockerfile
+.dockerignore
 
-# Fix Apache MPM Conflicts (Disables event/worker, enforces prefork)
-RUN a2dismod mpm_event mpm_worker || true \
-    && a2enmod mpm_prefork
+# PHP dependencies
+vendor/
 
-# Enable Apache mod_rewrite for custom routing / .htaccess
-RUN a2enmod rewrite
+# JS / frontend
+node_modules/
+npm-debug.log
+yarn-error.log
+package-lock.json
+yarn.lock
+dist/
+build/
 
-# Set working directory inside container
-WORKDIR /var/www/html
+# Environment files and secrets
+.env
+.env.local
+.env.*.local
 
-# Copy application files to Apache root
-COPY . /var/www/html/
+# OS / editor files
+.DS_Store
+Thumbs.db
+*.swp
+*.swo
+*~
+.idea/
+.vscode/
+*.sublime-project
+*.sublime-workspace
 
-# Set proper permissions for web user
-RUN chown -R www-data:www-data /var/www/html \
-    && chmod -R 755 /var/www/html
+# Logs and caches
+*.log
+storage/logs/
+storage/framework/cache/
+storage/framework/sessions/
+storage/framework/views/
+bootstrap/cache/
 
-# Expose standard web port
-EXPOSE 80
+# Uploads (persist through a Railway volume or object storage)
+public/uploads/*
 
-# Start Apache in the foreground
-CMD ["apache2-foreground"]
+# Tests
+tests/
+phpunit.xml
+README.md
