@@ -1,52 +1,30 @@
-# Version control
-.git
-.gitignore
-.github
+FROM php:8.3-apache
 
-# Docker
-Dockerfile
-.dockerignore
+WORKDIR /var/www/html
 
-# PHP dependencies
-vendor/
+# Install the PDO driver used by the Railway MySQL API.
+RUN docker-php-ext-install pdo_mysql
 
-# JS / frontend
-node_modules/
-npm-debug.log
-yarn-error.log
-package-lock.json
-yarn.lock
-dist/
-build/
+# Configure the Railway-injected PORT at container startup.
+COPY docker-entrypoint.sh /usr/local/bin/docker-entrypoint.sh
+RUN chmod +x /usr/local/bin/docker-entrypoint.sh
 
-# Environment files and secrets
-.env
-.env.local
-.env.*.local
+# Apache must have exactly one Multi-Processing Module enabled.
+RUN a2dismod mpm_event mpm_worker mpm_prefork || true \
+    && a2enmod mpm_prefork rewrite headers expires deflate \
+    && sed -ri 's/AllowOverride None/AllowOverride All/g' /etc/apache2/apache2.conf \
+    && echo "ServerName localhost" >> /etc/apache2/apache2.conf
 
-# OS / editor files
-.DS_Store
-Thumbs.db
-*.swp
-*.swo
-*~
-.idea/
-.vscode/
-*.sublime-project
-*.sublime-workspace
+# Copy project files.
+COPY . /var/www/html/
 
-# Logs and caches
-*.log
-storage/logs/
-storage/framework/cache/
-storage/framework/sessions/
-storage/framework/views/
-bootstrap/cache/
+# Create uploads directory and set permissions.
+RUN mkdir -p /var/www/html/public/uploads \
+    && chown -R www-data:www-data /var/www/html \
+    && find /var/www/html -type d -exec chmod 755 {} \; \
+    && find /var/www/html -type f -exec chmod 644 {} \; \
+    && chown -R www-data:www-data /var/www/html/public/uploads \
+    && chmod -R 775 /var/www/html/public/uploads
 
-# Uploads (persist through a Railway volume or object storage)
-public/uploads/*
-
-# Tests
-tests/
-phpunit.xml
-README.md
+EXPOSE 8080
+ENTRYPOINT ["/usr/local/bin/docker-entrypoint.sh"]

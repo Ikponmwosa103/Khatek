@@ -1,0 +1,52 @@
+# Version control
+.git
+.gitignore
+.github
+
+# Docker
+Dockerfile
+.dockerignore
+
+# PHP dependencies
+vendor/
+
+# JS / frontend
+node_modules/
+npm-debug.log
+yarn-error.log
+package-lock.json
+yarn.lock
+dist/
+build/
+
+# Environment files and secrets
+.env
+.env.local
+.env.*.local
+
+# OS / editor files
+.DS_Store
+Thumbs.db
+*.swp
+*.swo
+*~
+.idea/
+.vscode/
+*.sublime-project
+*.sublime-workspace
+
+# Logs and caches
+*.log
+storage/logs/
+storage/framework/cache/
+storage/framework/sessions/
+storage/framework/views/
+bootstrap/cache/
+
+# Uploads (persist through a Railway volume or object storage)
+public/uploads/*
+
+# Tests
+tests/
+phpunit.xml
+README.md
