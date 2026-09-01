@@ -3,19 +3,24 @@
 declare(strict_types=1);
 
 /*
- * Railway MySQL exposes MYSQLHOST, MYSQLPORT, MYSQLUSER, MYSQLPASSWORD, and
- * MYSQLDATABASE. Prefer those service-linked variables. Complete MySQL URLs
- * are supported as a fallback for setups that expose only a URL.
+ * Railway MySQL commonly exposes MYSQLHOST, MYSQLPORT, MYSQLUSER,
+ * MYSQLPASSWORD, and MYSQLDATABASE. This app also accepts the equivalent
+ * DB_HOST, DB_PORT, DB_USER, DB_PASSWORD, and DB_NAME names already used by
+ * some Railway services. Complete MySQL URLs are supported as a fallback.
  */
-$mysqlHost = trim((string) (getenv("MYSQLHOST") ?: ""));
+$mysqlHost = trim((string) (
+    getenv("MYSQLHOST")
+    ?: getenv("DB_HOST")
+    ?: ""
+));
 
 try {
     if ($mysqlHost !== "") {
         $host = $mysqlHost;
-        $port = (int) (getenv("MYSQLPORT") ?: 3306);
-        $database = (string) (getenv("MYSQLDATABASE") ?: "");
-        $username = (string) (getenv("MYSQLUSER") ?: "");
-        $password = (string) (getenv("MYSQLPASSWORD") ?: "");
+        $port = (int) (getenv("MYSQLPORT") ?: getenv("DB_PORT") ?: 3306);
+        $database = (string) (getenv("MYSQLDATABASE") ?: getenv("DB_NAME") ?: "");
+        $username = (string) (getenv("MYSQLUSER") ?: getenv("DB_USER") ?: "");
+        $password = (string) (getenv("MYSQLPASSWORD") ?: getenv("DB_PASSWORD") ?: "");
 
         if ($database === "" || $username === "") {
             throw new RuntimeException("Railway MySQL variables are incomplete.");
