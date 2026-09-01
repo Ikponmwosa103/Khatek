@@ -67,290 +67,207 @@
    Font size: 16px
    ===================================================== */
 
-@media (max-width: 768px) {
+/* =========================================
+   LIGHT PREMIUM MOBILE NAVIGATION
+========================================= */
 
-  /* Navbar */
+@media (max-width: 768px) {
   .navbar {
-    top: 10px;
+    top: 12px;
     left: 0;
     right: 0;
-    padding: 0 10px;
+    padding: 0 12px;
+    z-index: 1000;
   }
 
   .nav-inner {
     position: relative;
     width: 100%;
-    padding: 8px 10px 8px 14px;
-    border-radius: 24px;
+    min-height: 62px;
+    padding: 9px 10px 9px 14px;
+    border: 1px solid rgba(255,255,255,.9);
+    border-radius: 22px;
+    background: rgba(255,255,255,.82);
+    box-shadow:
+      0 12px 35px rgba(15,23,42,.14),
+      inset 0 1px 0 rgba(255,255,255,.95);
+    backdrop-filter: blur(22px) saturate(160%);
+    -webkit-backdrop-filter: blur(22px) saturate(160%);
   }
 
-  /* Mobile menu button */
+  .brand {
+    gap: 9px;
+    min-width: 0;
+    max-width: calc(100% - 54px);
+  }
+
+  .brand-logo {
+    width: 38px;
+    height: 38px;
+    flex: 0 0 38px;
+    border: 2px solid rgba(255,255,255,.9);
+    box-shadow: 0 5px 14px rgba(37,99,235,.2);
+  }
+
+  .brand span:last-child {
+    min-width: 0;
+    max-width: calc(100vw - 126px);
+    color: var(--ink);
+    font-size: 12px;
+    font-weight: 850;
+    letter-spacing: -.02em;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
   .mobile-toggle {
-    display: grid;
+    display: grid !important;
     place-items: center;
-    width: 42px;
-    height: 42px;
-    flex-shrink: 0;
-    border: 0;
-    cursor: pointer;
+    width: 42px !important;
+    height: 42px !important;
+    flex: 0 0 42px;
+    border: 1px solid rgba(37,99,235,.16);
+    border-radius: 15px;
+background: #fff;
+color: #2563eb;
+border: 1px solid rgba(37,99,235,.2);
+    box-shadow: 0 8px 18px rgba(37,99,235,.28);
   }
 
-  /* ===============================
-     MOBILE DROPDOWN
-     =============================== */
+  .mobile-toggle svg {
+    width: 20px;
+    height: 20px;
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 2;
+    stroke-linecap: round;
+  }
 
   .nav-links {
-    position: absolute !important;
-
-    top: calc(100% + 10px) !important;
-    left: 0 !important;
-    right: 0 !important;
+    position: fixed !important;
+    top: 86px !important;
+    left: 12px !important;
+    right: 12px !important;
     bottom: auto !important;
-
-    width: 100% !important;
+    width: auto !important;
     height: auto !important;
-    max-height: calc(100vh - 90px);
-
+    max-height: calc(100dvh - 100px) !important;
     display: flex !important;
     flex-direction: column !important;
-
-    /* Center the links */
-    align-items: center !important;
-
-    padding: 10px !important;
+    align-items: stretch !important;
     gap: 5px !important;
-
-    background: rgba(255, 255, 255, 0.97) !important;
-
-    backdrop-filter: blur(28px) saturate(180%);
-    -webkit-backdrop-filter: blur(28px) saturate(180%);
-
-    border: 1px solid rgba(255, 255, 255, 0.9);
-    border-radius: 22px;
-
+    padding: 18px !important;
+    border: 1px solid rgba(37,99,235,.14) !important;
+    border-radius: 28px !important;
+    background:
+      radial-gradient(circle at 90% 0%,rgba(96,165,250,.12),transparent 32%),
+      radial-gradient(circle at 0% 100%,rgba(124,58,237,.08),transparent 35%),
+      linear-gradient(155deg,#fff 0%,#f8fafc 100%) !important;
     box-shadow:
-      0 18px 45px rgba(15, 23, 42, 0.15),
-      inset 0 1px 0 rgba(255, 255, 255, 0.9);
-
-    opacity: 0;
-    visibility: hidden;
-
-    transform: translateY(-10px) scale(.98);
-    transform-origin: top center;
-
+      0 26px 70px rgba(15,23,42,.22),
+      inset 0 1px 0 rgba(255,255,255,.95) !important;
+    opacity: 0 !important;
+    visibility: hidden !important;
+    transform: translateY(-12px) scale(.96) !important;
+    transform-origin: top right;
     transition:
-      opacity .25s ease,
-      transform .25s ease,
-      visibility .25s ease;
-
-    overflow-x: hidden;
-    overflow-y: auto;
-
-    z-index: 998;
+      opacity .28s ease,
+      visibility .28s ease,
+      transform .28s cubic-bezier(.2,.8,.2,1) !important;
+    overflow-x: hidden !important;
+    overflow-y: auto !important;
+    z-index: 999 !important;
   }
 
-  /* Open menu */
+  .nav-links::before {
+    content: "KHATEK DIGITAL TECH  /  MENU";
+    display: block;
+    padding: 3px 12px 10px;
+    color: #2563eb;
+    font-size: 9px;
+    font-weight: 850;
+    letter-spacing: .18em;
+  }
+
   .nav-links.open {
     opacity: 1 !important;
     visibility: visible !important;
     transform: translateY(0) scale(1) !important;
   }
 
-  /* ===============================
-     NAV LINKS
-     =============================== */
+  .nav-links li {
+    width: 100%;
+    list-style: none;
+  }
 
   .nav-link {
-    width: 90% !important;
+    display: flex !important;
+    align-items: center;
+    justify-content: space-between;
+    width: 100% !important;
+    min-height: 48px;
+    padding: 13px 14px !important;
+    border: 1px solid transparent;
+    border-radius: 16px !important;
+    color: #334155 !important;
+    font-size: 14px !important;
+    font-weight: 700;
+    text-align: left !important;
+    transition: .2s ease;
+  }
 
-    padding: 13px 16px !important;
-
-    font-size: 16px !important;
-    font-weight: 650;
-
-    text-align: center !important;
-
-    color: var(--muted);
-
-    border-radius: 14px !important;
-
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-
-    transition:
-      background .2s ease,
-      color .2s ease,
-      transform .2s ease;
+  .nav-link::after {
+    content: "›";
+    color: rgba(37,99,235,.55);
+    font-size: 20px;
   }
 
   .nav-link:hover,
   .nav-link.active {
-    color: var(--blue);
-    background: rgba(37, 99, 235, .08);
+    color: #2563eb !important;
+    background: rgba(37,99,235,.08) !important;
+    border-color: rgba(37,99,235,.14);
+    transform: translateX(3px);
   }
-
-  .nav-link:active {
-    transform: scale(.98);
-  }
-
-  /* ===============================
-     AUTH / REGISTER
-     =============================== */
 
   .nav-auth {
-    width: 90%;
+    width: 100% !important;
+    display: grid !important;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px !important;
+    margin: 10px 0 0 !important;
+    padding: 14px 0 0 !important;
+    border-top: 1px solid rgba(148,163,184,.22) !important;
+  }
 
-    display: flex;
-    flex-direction: column;
+  .nav-auth .nav-link {
+    justify-content: center;
+    text-align: center !important;
+  }
 
-    align-items: center;
-
-    margin: 7px 0 0;
-    padding: 11px 4px 4px;
-
-    border-top: 1px solid var(--line);
-
-    gap: 9px;
+  .nav-auth .nav-link::after {
+    display: none;
   }
 
   .nav-auth .auth-register {
-    width: 100%;
-    padding: 13px;
-
-    font-size: 16px;
-    text-align: center;
-  }
-
-  /* ===============================
-     BRAND
-     =============================== */
-
-  .brand {
-    min-width: 0;
-    flex: 1;
-  }
-
-  .brand-logo {
-    flex-shrink: 0;
-  }
-
-  .brand span:last-child {
-    min-width: 0;
-    font-size: 13px;
-
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
+    color: #fff !important;
+    background: linear-gradient(135deg,#2563eb,#7c3aed) !important;
+    box-shadow: 0 8px 20px rgba(37,99,235,.25);
   }
 }
-
-
-/* =====================================================
-   SMALL PHONES
-   ===================================================== */
 
 @media (max-width: 400px) {
-
-  .navbar {
-    padding: 0 7px;
-  }
-
-  .nav-inner {
-    width: 100%;
-    padding: 7px 8px;
-    border-radius: 21px;
-  }
-
-  .mobile-toggle {
-    width: 40px;
-    height: 40px;
-  }
-
   .nav-links {
-    top: calc(100% + 8px) !important;
-
-    padding: 8px !important;
-
-    border-radius: 19px;
-  }
-
-  .nav-link {
-    width: 92% !important;
-
-    padding: 12px 14px !important;
-
-    font-size: 16px !important;
+    top: 82px !important;
+    left: 8px !important;
+    right: 8px !important;
+    padding: 14px !important;
+    border-radius: 24px !important;
   }
 
   .nav-auth {
-    width: 92%;
-  }
-
-  .nav-auth .auth-register {
-    font-size: 16px;
-    padding: 12px;
-  }
-
-  .brand span:last-child {
-    font-size: 12px;
-  }
-}
-
-
-/* =====================================================
-   VERY SMALL PHONES
-   ===================================================== */
-
-@media (max-width: 360px) {
-
-  .navbar {
-    padding: 0 5px;
-  }
-
-  .nav-inner {
-    padding: 6px 7px;
-    border-radius: 19px;
-  }
-
-  .brand {
-    gap: 7px;
-  }
-
-  .brand-logo {
-    width: 32px;
-    height: 32px;
-  }
-
-  .brand span:last-child {
-    font-size: 11px;
-  }
-
-  .mobile-toggle {
-    width: 37px;
-    height: 37px;
-  }
-
-  .nav-links {
-    top: calc(100% + 7px) !important;
-
-    padding: 6px !important;
-
-    border-radius: 17px;
-  }
-
-  .nav-link {
-    width: 94% !important;
-
-    padding: 11px 10px !important;
-
-    font-size: 16px !important;
-
-    border-radius: 12px !important;
-  }
-
-  .nav-auth {
-    width: 94%;
+    grid-template-columns: 1fr;
   }
 
   .nav-auth .auth-register {
