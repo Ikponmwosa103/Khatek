@@ -2,15 +2,20 @@ FROM php:8.3-apache
 
 WORKDIR /var/www/html
 
-# Enable required Apache modules and configure rewrite rules
-RUN a2enmod rewrite headers expires deflate \
+# Configure the Railway-injected PORT at container startup.
+COPY docker-entrypoint.sh /usr/local/bin/docker-entrypoint.sh
+RUN chmod +x /usr/local/bin/docker-entrypoint.sh
+
+# Apache must have exactly one Multi-Processing Module enabled.
+RUN a2dismod mpm_event mpm_worker mpm_prefork || true \
+    && a2enmod mpm_prefork rewrite headers expires deflate \
     && sed -ri 's/AllowOverride None/AllowOverride All/g' /etc/apache2/apache2.conf \
     && echo "ServerName localhost" >> /etc/apache2/apache2.conf
 
-# Copy project files
+# Copy project files.
 COPY . /var/www/html/
 
-# Create uploads directory and set permissions
+# Create uploads directory and set permissions.
 RUN mkdir -p /var/www/html/public/uploads \
     && chown -R www-data:www-data /var/www/html \
     && find /var/www/html -type d -exec chmod 755 {} \; \
@@ -18,7 +23,5 @@ RUN mkdir -p /var/www/html/public/uploads \
     && chown -R www-data:www-data /var/www/html/public/uploads \
     && chmod -R 775 /var/www/html/public/uploads
 
-# Railway port binding configuration via start command
 EXPOSE 8080
-
-CMD ["sh", "-c", "sed -i \"s/80/${PORT:-8080}/g\" /etc/apache2/ports.conf /etc/apache2/sites-available/*.conf && apache2-foreground"]
+ENTRYPOINT ["/usr/local/bin/docker-entrypoint.sh"]

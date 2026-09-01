@@ -992,25 +992,40 @@
 
         try {
 
-          const response =
-            await fetch(
-              "./Api/login.php",
-              {
-                method: "POST",
+// Register Handler
+async function handleRegister(event) {
+    event.preventDefault();
+    const response = await fetch('/api/register.php', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+            full_name: document.getElementById('reg_name').value,
+            email: document.getElementById('reg_email').value,
+            password: document.getElementById('reg_password').value
+        })
+    });
+    const result = await response.json();
+    alert(result.message);
+}
 
-                headers: {
-                  "Content-Type":
-                    "application/json"
-                },
-
-                credentials: "include",
-
-                body: JSON.stringify({
-                  email: email,
-                  password: password
-                })
-              }
-            );
+// Login Handler
+async function handleLogin(event) {
+    event.preventDefault();
+    const response = await fetch('/api/login.php', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+            email: document.getElementById('login_email').value,
+            password: document.getElementById('login_password').value
+        })
+    });
+    const result = await response.json();
+    if (result.status === 'success') {
+        alert('Welcome back, ' + result.user.full_name);
+    } else {
+        alert(result.message);
+    }
+}
 
 
           /*

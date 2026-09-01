@@ -6,9 +6,8 @@
 # Docker
 Dockerfile
 .dockerignore
-docker-entrypoint.sh
 
-# PHP dependencies (reinstall in container if needed; avoids stale vendor)
+# PHP dependencies
 vendor/
 
 # JS / frontend
@@ -20,12 +19,12 @@ yarn.lock
 dist/
 build/
 
-# Env & secrets - NEVER copy .env into image; use Railway variables
+# Environment files and secrets
 .env
 .env.local
 .env.*.local
 
-# OS / editor
+# OS / editor files
 .DS_Store
 Thumbs.db
 *.swp
@@ -36,7 +35,7 @@ Thumbs.db
 *.sublime-project
 *.sublime-workspace
 
-# Logs & caches
+# Logs and caches
 *.log
 storage/logs/
 storage/framework/cache/
@@ -44,10 +43,10 @@ storage/framework/sessions/
 storage/framework/views/
 bootstrap/cache/
 
-# Uploads (persist via volume, not image)
+# Uploads (persist through a Railway volume or object storage)
 public/uploads/*
 
-# Tests & CI not needed in prod image
+# Tests
 tests/
 phpunit.xml
 README.md
