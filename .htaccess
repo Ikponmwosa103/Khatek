@@ -4,16 +4,13 @@
 <IfModule mod_rewrite.c>
     RewriteEngine On
 
-    # Redirect to HTTPS if behind Railway proxy (X-Forwarded-Proto)
+    # Redirect to HTTPS if behind the Render proxy (X-Forwarded-Proto)
     # Uncomment if you want to force HTTPS:
     # RewriteCond %{HTTP:X-Forwarded-Proto} !https
     # RewriteRule ^ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
 
-    # Send all non-file/directory requests through index.php (common for Laravel/Slim)
-    # If you serve plain PHP files, you can remove the fallback rule:
-    RewriteCond %{REQUEST_FILENAME} !-f
-    RewriteCond %{REQUEST_FILENAME} !-d
-    RewriteRule ^ index.php [L]
+    # This is a multi-page site, so existing HTML and PHP files are served
+    # directly. Do not route unknown requests to a missing index.php file.
 </IfModule>
 
 # Caching & compression (requires expires + deflate which the optimized Dockerfile enables)

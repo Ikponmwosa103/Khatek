@@ -995,11 +995,11 @@
 // Register Handler
 async function handleRegister(event) {
     event.preventDefault();
-    const response = await fetch('/api/register.php', {
+    const response = await fetch('./Api/register.php', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-            full_name: document.getElementById('reg_name').value,
+            name: document.getElementById('reg_name').value,
             email: document.getElementById('reg_email').value,
             password: document.getElementById('reg_password').value
         })
@@ -1011,7 +1011,7 @@ async function handleRegister(event) {
 // Login Handler
 async function handleLogin(event) {
     event.preventDefault();
-    const response = await fetch('/api/login.php', {
+    const response = await fetch('./Api/login.php', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
@@ -1651,7 +1651,7 @@ async function handleLogin(event) {
 
           showTemporaryNotification(
             "Connection error",
-            "Unable to connect to the server. Make sure XAMPP Apache and MySQL are running.",
+            "Unable to connect to the server. Please try again in a moment.",
             "error",
             "!"
           );
@@ -1659,7 +1659,7 @@ async function handleLogin(event) {
 
           showMsg(
             message,
-            "Unable to connect to the server. Make sure XAMPP Apache and MySQL are running.",
+            "Unable to connect to the server. Please try again in a moment.",
             "error"
           );
 
