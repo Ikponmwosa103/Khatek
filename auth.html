@@ -6,7 +6,7 @@
   <meta name="description" content="Login or create your account at Khatek Digital Tech Nig.">
   <title>Login / Register — Khatek Digital Tech Nig.</title>
   <style>
-
+    
 .auth-notification {
   position: fixed;
   top: 50%;
@@ -61,6 +61,302 @@
 
   font-size: 27px;
   font-weight: 800;
+}
+/* =====================================================
+   RESPONSIVE MOBILE NAVIGATION
+   Font size: 16px
+   ===================================================== */
+
+@media (max-width: 768px) {
+
+  /* Navbar */
+  .navbar {
+    top: 10px;
+    left: 0;
+    right: 0;
+    padding: 0 10px;
+  }
+
+  .nav-inner {
+    position: relative;
+    width: 100%;
+    padding: 8px 10px 8px 14px;
+    border-radius: 24px;
+  }
+
+  /* Mobile menu button */
+  .mobile-toggle {
+    display: grid;
+    place-items: center;
+    width: 42px;
+    height: 42px;
+    flex-shrink: 0;
+    border: 0;
+    cursor: pointer;
+  }
+
+  /* ===============================
+     MOBILE DROPDOWN
+     =============================== */
+
+  .nav-links {
+    position: absolute !important;
+
+    top: calc(100% + 10px) !important;
+    left: 0 !important;
+    right: 0 !important;
+    bottom: auto !important;
+
+    width: 100% !important;
+    height: auto !important;
+    max-height: calc(100vh - 90px);
+
+    display: flex !important;
+    flex-direction: column !important;
+
+    /* Center the links */
+    align-items: center !important;
+
+    padding: 10px !important;
+    gap: 5px !important;
+
+    background: rgba(255, 255, 255, 0.97) !important;
+
+    backdrop-filter: blur(28px) saturate(180%);
+    -webkit-backdrop-filter: blur(28px) saturate(180%);
+
+    border: 1px solid rgba(255, 255, 255, 0.9);
+    border-radius: 22px;
+
+    box-shadow:
+      0 18px 45px rgba(15, 23, 42, 0.15),
+      inset 0 1px 0 rgba(255, 255, 255, 0.9);
+
+    opacity: 0;
+    visibility: hidden;
+
+    transform: translateY(-10px) scale(.98);
+    transform-origin: top center;
+
+    transition:
+      opacity .25s ease,
+      transform .25s ease,
+      visibility .25s ease;
+
+    overflow-x: hidden;
+    overflow-y: auto;
+
+    z-index: 998;
+  }
+
+  /* Open menu */
+  .nav-links.open {
+    opacity: 1 !important;
+    visibility: visible !important;
+    transform: translateY(0) scale(1) !important;
+  }
+
+  /* ===============================
+     NAV LINKS
+     =============================== */
+
+  .nav-link {
+    width: 90% !important;
+
+    padding: 13px 16px !important;
+
+    font-size: 16px !important;
+    font-weight: 650;
+
+    text-align: center !important;
+
+    color: var(--muted);
+
+    border-radius: 14px !important;
+
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+
+    transition:
+      background .2s ease,
+      color .2s ease,
+      transform .2s ease;
+  }
+
+  .nav-link:hover,
+  .nav-link.active {
+    color: var(--blue);
+    background: rgba(37, 99, 235, .08);
+  }
+
+  .nav-link:active {
+    transform: scale(.98);
+  }
+
+  /* ===============================
+     AUTH / REGISTER
+     =============================== */
+
+  .nav-auth {
+    width: 90%;
+
+    display: flex;
+    flex-direction: column;
+
+    align-items: center;
+
+    margin: 7px 0 0;
+    padding: 11px 4px 4px;
+
+    border-top: 1px solid var(--line);
+
+    gap: 9px;
+  }
+
+  .nav-auth .auth-register {
+    width: 100%;
+    padding: 13px;
+
+    font-size: 16px;
+    text-align: center;
+  }
+
+  /* ===============================
+     BRAND
+     =============================== */
+
+  .brand {
+    min-width: 0;
+    flex: 1;
+  }
+
+  .brand-logo {
+    flex-shrink: 0;
+  }
+
+  .brand span:last-child {
+    min-width: 0;
+    font-size: 13px;
+
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+}
+
+
+/* =====================================================
+   SMALL PHONES
+   ===================================================== */
+
+@media (max-width: 400px) {
+
+  .navbar {
+    padding: 0 7px;
+  }
+
+  .nav-inner {
+    width: 100%;
+    padding: 7px 8px;
+    border-radius: 21px;
+  }
+
+  .mobile-toggle {
+    width: 40px;
+    height: 40px;
+  }
+
+  .nav-links {
+    top: calc(100% + 8px) !important;
+
+    padding: 8px !important;
+
+    border-radius: 19px;
+  }
+
+  .nav-link {
+    width: 92% !important;
+
+    padding: 12px 14px !important;
+
+    font-size: 16px !important;
+  }
+
+  .nav-auth {
+    width: 92%;
+  }
+
+  .nav-auth .auth-register {
+    font-size: 16px;
+    padding: 12px;
+  }
+
+  .brand span:last-child {
+    font-size: 12px;
+  }
+}
+
+
+/* =====================================================
+   VERY SMALL PHONES
+   ===================================================== */
+
+@media (max-width: 360px) {
+
+  .navbar {
+    padding: 0 5px;
+  }
+
+  .nav-inner {
+    padding: 6px 7px;
+    border-radius: 19px;
+  }
+
+  .brand {
+    gap: 7px;
+  }
+
+  .brand-logo {
+    width: 32px;
+    height: 32px;
+  }
+
+  .brand span:last-child {
+    font-size: 11px;
+  }
+
+  .mobile-toggle {
+    width: 37px;
+    height: 37px;
+  }
+
+  .nav-links {
+    top: calc(100% + 7px) !important;
+
+    padding: 6px !important;
+
+    border-radius: 17px;
+  }
+
+  .nav-link {
+    width: 94% !important;
+
+    padding: 11px 10px !important;
+
+    font-size: 16px !important;
+
+    border-radius: 12px !important;
+  }
+
+  .nav-auth {
+    width: 94%;
+  }
+
+  .nav-auth .auth-register {
+    font-size: 16px;
+    padding: 11px;
+  }
 }
 
 .auth-notification h3 {
@@ -282,6 +578,7 @@
       .footer p{margin:0 auto}
       .footer-bottom{flex-direction:column;align-items:center}
     }
+    
   </style>
 </head>
 <body>
