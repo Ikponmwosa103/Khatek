@@ -4,22 +4,36 @@ declare(strict_types=1);
 
 /*
  * Railway MySQL exposes MYSQLHOST, MYSQLPORT, MYSQLUSER, MYSQLPASSWORD, and
- * MYSQLDATABASE. MYSQL_URL/DATABASE_URL are also accepted when Railway
- * provides a complete connection string.
+ * MYSQLDATABASE. Prefer those service-linked variables. Complete MySQL URLs
+ * are supported as a fallback for setups that expose only a URL.
  */
-$connectionUrl = trim((string) (
-    getenv("MYSQL_URL")
-    ?: getenv("MYSQL_PUBLIC_URL")
-    ?: getenv("DATABASE_URL")
-    ?: ""
-));
-
-$dsn = "";
-$username = "";
-$password = "";
+$mysqlHost = trim((string) (getenv("MYSQLHOST") ?: ""));
 
 try {
-    if ($connectionUrl !== "") {
+    if ($mysqlHost !== "") {
+        $host = $mysqlHost;
+        $port = (int) (getenv("MYSQLPORT") ?: 3306);
+        $database = (string) (getenv("MYSQLDATABASE") ?: "");
+        $username = (string) (getenv("MYSQLUSER") ?: "");
+        $password = (string) (getenv("MYSQLPASSWORD") ?: "");
+
+        if ($database === "" || $username === "") {
+            throw new RuntimeException("Railway MySQL variables are incomplete.");
+        }
+
+        $dsn = "mysql:host={$host};port={$port};dbname={$database};charset=utf8mb4";
+    } else {
+        $connectionUrl = trim((string) (
+            getenv("MYSQL_URL")
+            ?: getenv("MYSQL_PUBLIC_URL")
+            ?: getenv("DATABASE_URL")
+            ?: ""
+        ));
+
+        if ($connectionUrl === "") {
+            throw new RuntimeException("Railway MySQL variables are missing.");
+        }
+
         $parts = parse_url($connectionUrl);
 
         if ($parts === false || empty($parts["scheme"]) || empty($parts["host"])) {
@@ -40,14 +54,6 @@ try {
         if ($database === "" || $username === "") {
             throw new RuntimeException("Database URL is missing required fields.");
         }
-
-        $dsn = "mysql:host={$host};port={$port};dbname={$database};charset=utf8mb4";
-    } else {
-        $host = trim((string) (getenv("MYSQLHOST") ?: "127.0.0.1"));
-        $port = (int) (getenv("MYSQLPORT") ?: 3306);
-        $database = (string) (getenv("MYSQLDATABASE") ?: "khatek_digital");
-        $username = (string) (getenv("MYSQLUSER") ?: "root");
-        $password = (string) (getenv("MYSQLPASSWORD") ?: "");
 
         $dsn = "mysql:host={$host};port={$port};dbname={$database};charset=utf8mb4";
     }
