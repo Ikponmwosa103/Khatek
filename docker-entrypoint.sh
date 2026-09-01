@@ -21,6 +21,12 @@ sed -ri "s/<VirtualHost \*:[0-9]+>/<VirtualHost *:${PORT_TO_USE}>/" \
 
 export APACHE_LISTEN_PORT="${PORT_TO_USE}"
 
+# Keep runtime configuration safe even if the image cache contains an older
+# Apache module state. The base image must have exactly one MPM enabled.
+a2dismod mpm_event mpm_worker mpm_prefork >/dev/null 2>&1 || true
+rm -f /etc/apache2/mods-enabled/mpm_*.load /etc/apache2/mods-enabled/mpm_*.conf
+a2enmod mpm_prefork >/dev/null
+
 # Fail clearly instead of entering a restart loop if configuration is invalid.
 apache2ctl -t
 
