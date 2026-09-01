@@ -2,14 +2,10 @@ FROM php:8.3-apache
 
 WORKDIR /var/www/html
 
-# Render provides PostgreSQL through DATABASE_URL. Install the PDO drivers
-# used by the PHP API, while retaining MySQL compatibility for local setups.
-RUN apt-get update \
-    && apt-get install -y --no-install-recommends libpq-dev \
-    && docker-php-ext-install pdo_pgsql pdo_mysql \
-    && rm -rf /var/lib/apt/lists/*
+# Install the PDO driver used by the Railway MySQL API.
+RUN docker-php-ext-install pdo_mysql
 
-# Configure the Render-injected PORT at container startup.
+# Configure the Railway-injected PORT at container startup.
 COPY docker-entrypoint.sh /usr/local/bin/docker-entrypoint.sh
 RUN chmod +x /usr/local/bin/docker-entrypoint.sh
 

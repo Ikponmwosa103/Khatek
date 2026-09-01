@@ -1,7 +1,7 @@
 #!/bin/bash
 set -e
 
-# Render (and similar PaaS providers) inject $PORT at runtime.
+# Railway (and similar PaaS providers) inject $PORT at runtime.
 PORT_TO_USE="${PORT:-8080}"
 
 echo ">>> docker-entrypoint: configuring Apache to listen on port ${PORT_TO_USE}"

@@ -1,25 +1,25 @@
 # Khatek Digital Tech
 
-Render-ready PHP website for Khatek Digital Tech Nig.
+Railway-ready PHP website for Khatek Digital Tech Nig.
 
-## Render setup
+## Railway setup
 
-1. Create a Render Web Service from this folder/repository.
-2. Keep the service runtime set to Docker so Render uses the included
-   `Dockerfile`.
-3. Create or link a Render PostgreSQL database.
-4. Add the database's connection string as the service environment variable
-   `DATABASE_URL`.
-5. Deploy. Render supplies `PORT` automatically; the included entrypoint
-   configures Apache to use it.
+1. Create a Railway service from this folder/repository.
+2. Keep the service on the Dockerfile deployment path.
+3. Add or link a Railway MySQL service to the web service.
+4. Make sure the web service receives these Railway variables:
+   `MYSQLHOST`, `MYSQLPORT`, `MYSQLUSER`, `MYSQLPASSWORD`, and
+   `MYSQLDATABASE`.
+5. Railway supplies `PORT` automatically; the included entrypoint configures
+   Apache to use it.
 
-The PHP API also supports the `DB_HOST`, `DB_PORT`, `DB_NAME`, `DB_USER`, and
-`DB_PASSWORD` variables for local PostgreSQL setups, and the `MYSQL*` variables
-for local or legacy MySQL setups.
+The API also accepts `MYSQL_URL` or `MYSQL_PUBLIC_URL` when Railway provides a
+complete MySQL connection URL. `DATABASE_URL` is accepted only when its scheme
+is `mysql`.
 
 ## Database setup
 
-Run `schema.sql` once against the Render PostgreSQL database before using
+Run `schema.sql` once against the Railway MySQL database before using
 registration or login.
 
 ## Included routes
