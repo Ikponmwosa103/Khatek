@@ -1168,7 +1168,85 @@
     }
     .account-profile-btn:hover{transform:translateY(-2px);box-shadow:0 10px 28px rgba(37,99,235,.35)}
     .account-profile-btn svg{width:21px;height:21px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+    .account-mobile-action {
+  display: none;
+  align-items: center;
+  justify-content: center;
+  min-height: 42px;
+  padding: 0 12px;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  background: #fff;
+  color: var(--ink);
+  font-size: 12px;
+  font-weight: 750;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: .2s ease;
+}
 
+.account-mobile-logout:hover {
+  color: var(--blue);
+  border-color: #bfdbfe;
+  background: #eff6ff;
+}
+
+.account-mobile-delete {
+  color: #dc2626;
+  border-color: #fecaca;
+  background: #fff;
+}
+
+.account-mobile-delete:hover {
+  color: #b91c1c;
+  background: #fef2f2;
+}
+
+@media (max-width: 768px) {
+  .nav-auth.account-nav-auth {
+    display: grid !important;
+    grid-template-columns: 44px minmax(0, 1fr) minmax(0, 1fr) !important;
+    align-items: center;
+    gap: 7px !important;
+    width: 100% !important;
+    margin: 12px 0 0 !important;
+    padding: 14px 0 0 !important;
+    border-top: 1px solid var(--line) !important;
+  }
+
+  .account-profile-btn {
+    display: grid !important;
+    width: 42px !important;
+    height: 42px !important;
+
+    /* Stops the user head from opening the sidebar on mobile */
+    pointer-events: none;
+    cursor: default;
+  }
+
+  .account-mobile-action {
+    display: flex;
+    width: 100%;
+  }
+}
+
+@media (max-width: 400px) {
+  .nav-auth.account-nav-auth {
+    grid-template-columns: 40px minmax(0, 1fr) minmax(0, 1fr) !important;
+    gap: 5px !important;
+  }
+
+  .account-profile-btn {
+    width: 38px !important;
+    height: 38px !important;
+  }
+
+  .account-mobile-action {
+    min-height: 38px;
+    padding: 0 7px;
+    font-size: 10px;
+  }
+}
     .account-overlay{
       position:fixed;inset:0;z-index:1998;
       background:rgba(15,23,42,.28);
@@ -1358,14 +1436,40 @@
         <li><a class="nav-link" href="#programs">Programs</a></li>
         <li><a class="nav-link" href="#services">Services</a></li>
         <li><a class="nav-link" href="#contact">Contact</a></li>
-        <li class="nav-auth account-nav-auth">
-          <button class="account-profile-btn" id="accountProfileBtn" type="button" aria-label="Open account menu" aria-expanded="false">
-            <svg viewBox="0 0 24 24">
-              <circle cx="12" cy="8" r="4"></circle>
-              <path d="M4 21c0-4.4 3.6-8 8-8s8 3.6 8 8"></path>
-            </svg>
-          </button>
-        </li>
+<li class="nav-auth account-nav-auth">
+
+  <!-- User head remains visible but is not clickable on mobile -->
+  <button
+    class="account-profile-btn"
+    id="accountProfileBtn"
+    type="button"
+    aria-label="Open account menu"
+    aria-expanded="false"
+  >
+    <svg viewBox="0 0 24 24">
+      <circle cx="12" cy="8" r="4"></circle>
+      <path d="M4 21c0-4.4 3.6-8 8-8s8 3.6 8 8"></path>
+    </svg>
+  </button>
+
+  <!-- Mobile account buttons -->
+  <button
+    class="account-mobile-action account-mobile-logout"
+    id="accountMobileLogoutBtn"
+    type="button"
+  >
+    Logout
+  </button>
+
+  <button
+    class="account-mobile-action account-mobile-delete"
+    id="accountMobileDeleteBtn"
+    type="button"
+  >
+    Delete account
+  </button>
+
+</li>
       </ul>
     </div>
   </nav>
@@ -1700,6 +1804,23 @@
     const accountLogoutBtn = document.getElementById("accountLogoutBtn");
     const accountDeleteBtn = document.getElementById("accountDeleteBtn");
     const accountDetailsBtn = document.getElementById("accountDetailsBtn");
+    const accountMobileLogoutBtn =
+  document.getElementById("accountMobileLogoutBtn");
+
+const accountMobileDeleteBtn =
+  document.getElementById("accountMobileDeleteBtn");
+
+if (accountMobileLogoutBtn && accountLogoutBtn) {
+  accountMobileLogoutBtn.addEventListener("click", () => {
+    accountLogoutBtn.click();
+  });
+}
+
+if (accountMobileDeleteBtn && accountDeleteBtn) {
+  accountMobileDeleteBtn.addEventListener("click", () => {
+    accountDeleteBtn.click();
+  });
+}
 
     const accountToast = document.getElementById("accountToast");
     const accountToastIcon = document.getElementById("accountToastIcon");
