@@ -6,6 +6,217 @@
   <meta name="description" content="Khatek Digital Tech Nig. provides practical digital skills training, technology services, business support and modern digital solutions.">
   <title>Khatek Digital Tech Nig. — Digital Skills. Real Solutions.</title>
   <style>
+  /* Center both the number and its label inside every stat card */
+  #home .hero-stats .stat-card {
+    text-align: center !important;
+  }
+
+  #home .hero-stats .stat-card strong {
+    display: block !important;
+    width: 100% !important;
+    text-align: center !important;
+  }
+
+  #home .hero-stats .stat-card span {
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    width: 100% !important;
+    margin-inline: auto !important;
+    text-align: center !important;
+  }
+
+  #home .hero-stats .stat-card span::before {
+    display: none !important;
+  }
+
+  /* Match the main index premium mobile navigation */
+  @media (max-width: 768px) {
+    #navbar .nav-inner {
+      position: relative !important;
+      min-height: 62px !important;
+      padding: 9px 10px 9px 14px !important;
+      border: 1px solid rgba(255,255,255,.9) !important;
+      border-radius: 22px !important;
+      background: rgba(255,255,255,.82) !important;
+      box-shadow:
+        0 12px 35px rgba(15,23,42,.14),
+        inset 0 1px 0 rgba(255,255,255,.95) !important;
+      backdrop-filter: blur(22px) saturate(160%) !important;
+      -webkit-backdrop-filter: blur(22px) saturate(160%) !important;
+    }
+
+    #navbar #navLinks {
+      position: fixed !important;
+      top: 86px !important;
+      left: 12px !important;
+      right: 12px !important;
+      bottom: auto !important;
+      width: auto !important;
+      height: auto !important;
+      max-height: calc(100dvh - 100px) !important;
+      display: flex !important;
+      flex-direction: column !important;
+      align-items: stretch !important;
+      gap: 5px !important;
+      padding: 18px !important;
+      border: 1px solid rgba(37,99,235,.14) !important;
+      border-radius: 28px !important;
+      background:
+        radial-gradient(circle at 90% 0%,rgba(96,165,250,.12),transparent 32%),
+        radial-gradient(circle at 0% 100%,rgba(124,58,237,.08),transparent 35%),
+        linear-gradient(155deg,#fff 0%,#f8fafc 100%) !important;
+      box-shadow:
+        0 26px 70px rgba(15,23,42,.22),
+        inset 0 1px 0 rgba(255,255,255,.95) !important;
+      opacity: 0 !important;
+      visibility: hidden !important;
+      transform: translateY(-12px) scale(.96) !important;
+      transform-origin: top right !important;
+      transition:
+        opacity .28s ease,
+        visibility .28s ease,
+        transform .28s cubic-bezier(.2,.8,.2,1) !important;
+      overflow-x: hidden !important;
+      overflow-y: auto !important;
+      z-index: 999 !important;
+    }
+
+    #navbar #navLinks::before {
+      content: "KHATEK DIGITAL TECH  /  MENU";
+      display: block !important;
+      padding: 3px 12px 10px !important;
+      color: #2563eb !important;
+      font-size: 9px !important;
+      font-weight: 850 !important;
+      letter-spacing: .18em !important;
+    }
+
+    #navbar #navLinks.open {
+      opacity: 1 !important;
+      visibility: visible !important;
+      transform: translateY(0) scale(1) !important;
+    }
+
+    #navbar #navLinks > li {
+      width: 100% !important;
+      list-style: none !important;
+    }
+
+    #navbar #navLinks .nav-link {
+      display: flex !important;
+      align-items: center !important;
+      justify-content: space-between !important;
+      width: 100% !important;
+      min-height: 48px !important;
+      padding: 13px 14px !important;
+      border: 1px solid transparent !important;
+      border-radius: 16px !important;
+      color: #334155 !important;
+      font-size: 14px !important;
+      font-weight: 700 !important;
+      text-align: left !important;
+    }
+
+    #navbar #navLinks .nav-link::after {
+      content: "›";
+      color: rgba(37,99,235,.55) !important;
+      font-size: 20px !important;
+    }
+
+    #navbar #navLinks .nav-link:hover,
+    #navbar #navLinks .nav-link.active {
+      color: #2563eb !important;
+      background: rgba(37,99,235,.08) !important;
+      border-color: rgba(37,99,235,.14) !important;
+      transform: translateX(3px);
+    }
+
+    #navbar #navLinks .nav-auth.account-nav-auth {
+      display: grid !important;
+      grid-template-columns: 44px minmax(0,1fr) minmax(0,1fr) !important;
+      align-items: center !important;
+      gap: 7px !important;
+      width: 100% !important;
+      margin: 10px 0 0 !important;
+      padding: 14px 0 0 !important;
+      border-top: 1px solid rgba(148,163,184,.22) !important;
+    }
+
+    #navbar #navLinks .account-profile-btn {
+      display: grid !important;
+      width: 42px !important;
+      height: 42px !important;
+      pointer-events: none !important;
+      cursor: default !important;
+    }
+
+    #navbar #navLinks .account-mobile-action {
+      display: flex !important;
+      align-items: center !important;
+      justify-content: center !important;
+      width: 100% !important;
+      min-height: 42px !important;
+      padding: 0 10px !important;
+      border: 1px solid #e2e8f0 !important;
+      border-radius: 999px !important;
+      background: #fff !important;
+      color: #0f172a !important;
+      font-size: 11px !important;
+      font-weight: 750 !important;
+      white-space: nowrap !important;
+    }
+
+    #navbar #navLinks .account-mobile-delete {
+      color: #dc2626 !important;
+      border-color: #fecaca !important;
+    }
+
+    #navbar #navLinks .account-mobile-logout:hover {
+      color: #2563eb !important;
+      background: #eff6ff !important;
+    }
+
+    #navbar #navLinks .account-mobile-delete:hover {
+      color: #b91c1c !important;
+      background: #fef2f2 !important;
+    }
+  }
+
+  @media (max-width: 400px) {
+    #navbar #navLinks {
+      top: 82px !important;
+      left: 8px !important;
+      right: 8px !important;
+      padding: 14px !important;
+      border-radius: 24px !important;
+    }
+
+    #navbar #navLinks .nav-auth.account-nav-auth {
+      grid-template-columns: 38px minmax(0,1fr) minmax(0,1fr) !important;
+      gap: 5px !important;
+    }
+
+    #navbar #navLinks .account-profile-btn {
+      width: 38px !important;
+      height: 38px !important;
+    }
+
+    #navbar #navLinks .account-mobile-action {
+      min-height: 38px !important;
+      padding: 0 6px !important;
+      font-size: 10px !important;
+    }
+  }
+</style>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <meta name="description" content="Khatek Digital Tech Nig. provides practical digital skills training, technology services, business support and modern digital solutions.">
+  <title>Khatek Digital Tech Nig. — Digital Skills. Real Solutions.</title>
+  <style>
     :root{
       --navy:#0b1220;
       --blue:#2563eb;
@@ -209,9 +420,8 @@
      STAT CARDS — EDGE TO EDGE
   ======================================= */
 
-  .hero-stats {
+ .hero-stats {
     position: relative !important;
-
     left: 50% !important;
     transform: translateX(-50%) !important;
 
@@ -222,9 +432,8 @@
     flex-direction: column !important;
     align-items: stretch !important;
 
-    gap: 12px !important;
-
-    margin-top: 24px !important;
+    gap: 10px !important;
+    margin-top: 20px !important;
     margin-bottom: 0 !important;
   }
 
@@ -234,7 +443,6 @@
     min-width: 0 !important;
 
     margin: 0 !important;
-
     box-sizing: border-box !important;
   }
 
@@ -271,6 +479,7 @@
 
   .hero-stats {
     position: relative !important;
+
     left: 50% !important;
     transform: translateX(-50%) !important;
 
@@ -281,8 +490,9 @@
     flex-direction: column !important;
     align-items: stretch !important;
 
-    gap: 10px !important;
-    margin-top: 20px !important;
+    gap: 12px !important;
+
+    margin-top: 24px !important;
     margin-bottom: 0 !important;
   }
 
@@ -292,8 +502,10 @@
     min-width: 0 !important;
 
     margin: 0 !important;
+
     box-sizing: border-box !important;
   }
+
 
 
   /* ---------- NAVBAR ---------- */
@@ -615,62 +827,26 @@
     }
     .btn-secondary:hover{border-color:var(--blue);color:var(--blue);transform:translateY(-2px)}
 .hero-stats {
-  display: flex;
-  gap: 12px;
-  flex-wrap: wrap;
-  justify-content: center;
-  width: 100%;
-}
-/* ================================
-   PREMIUM HERO STATS
-================================ */
+    grid-template-columns: 1fr;
+    width: 100%;
+    max-width: 100%;
+    gap: 10px;
+    margin-top: 20px;
+  }
 
-.hero-stats {
-  display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 14px;
-  margin-top: 30px;
-  width: 100%;
-  max-width: 720px;
-}
+  .stat-card {
+    min-height: 105px;
+    padding: 19px;
+    border-radius: 20px;
+  }
 
-.stat-card {
-  position: relative;
-  isolation: isolate;
-  min-height: 145px;
-  padding: 24px 22px;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
+  .stat-card strong {
+    font-size: 1.8rem;
+  }
 
-  border: 1px solid rgba(226, 232, 240, 0.85);
-  border-radius: 24px;
-
-  background:
-    linear-gradient(
-      145deg,
-      rgba(255, 255, 255, 0.96),
-      rgba(248, 250, 252, 0.72)
-    );
-
-  box-shadow:
-    0 20px 45px rgba(15, 23, 42, 0.07),
-    0 5px 15px rgba(15, 23, 42, 0.035),
-    inset 0 1px 0 rgba(255, 255, 255, 0.95);
-
-  backdrop-filter: blur(18px);
-  -webkit-backdrop-filter: blur(18px);
-
-  overflow: hidden;
-
-  transform: translateY(0);
-  transition:
-    transform 0.45s cubic-bezier(0.22, 1, 0.36, 1),
-    box-shadow 0.45s ease,
-    border-color 0.35s ease;
-}
-
-
+  .stat-card span {
+    font-size: .74rem;
+  }
 /* Soft ambient glow */
 
 .stat-card::before {
