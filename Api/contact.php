@@ -7,7 +7,7 @@ header("Content-Type: application/json; charset=UTF-8");
 use PHPMailer\PHPMailer\Exception;
 use PHPMailer\PHPMailer\PHPMailer;
 
-require __DIR__ . "/vendor/autoload.php";
+require dirname(__DIR__) . "/vendor/autoload.php";
 
 if ($_SERVER["REQUEST_METHOD"] !== "POST") {
     http_response_code(405);
