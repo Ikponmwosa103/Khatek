@@ -145,7 +145,7 @@ try {
     $mail->Password = $password;
 
     $mail->Port = $port;
-    $mail->Timeout = 15;
+    $mail->Timeout = 5;
 
     if ($encryption === "tls") {
         $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;
@@ -296,10 +296,41 @@ try {
         "mail_error={$mailError}]"
     );
 
+    $diagnostic = strtolower($error->getMessage() . " " . $mailError);
+    $userMessage = "Message not sent. Please try again later.";
+
+    if (
+        str_contains($diagnostic, "timeout") ||
+        str_contains($diagnostic, "timed out") ||
+        str_contains($diagnostic, "could not connect") ||
+        str_contains($diagnostic, "connection refused") ||
+        str_contains($diagnostic, "network is unreachable")
+    ) {
+        $userMessage =
+            "The email service timed out after 5 seconds. Please try again.";
+    } elseif (
+        str_contains($diagnostic, "authentication") ||
+        str_contains($diagnostic, "authenticate") ||
+        str_contains($diagnostic, "535")
+    ) {
+        $userMessage =
+            "The email service rejected its login settings.";
+    } elseif (
+        str_contains($diagnostic, "sender") ||
+        str_contains($diagnostic, "from address") ||
+        str_contains($diagnostic, "not owned")
+    ) {
+        $userMessage =
+            "The configured sender email has not been verified.";
+    } elseif (str_contains($diagnostic, "mailtrap_encryption")) {
+        $userMessage =
+            "The email service encryption setting is invalid.";
+    }
+
     http_response_code(500);
 
     echo json_encode([
         "success" => false,
-        "message" => "Unable to send your message right now. Please try again."
+        "message" => $userMessage
     ]);
 }
