@@ -7,6 +7,7 @@ RUN docker-php-ext-install pdo_mysql
 
 # Install Composer.
 COPY --from=composer:2 /usr/bin/composer /usr/bin/composer
+ENV COMPOSER_ALLOW_SUPERUSER=1
 
 # Configure Apache for Railway.
 RUN a2dismod mpm_event mpm_worker mpm_prefork >/dev/null 2>&1 || true \
@@ -20,10 +21,19 @@ RUN a2dismod mpm_event mpm_worker mpm_prefork >/dev/null 2>&1 || true \
 COPY composer.json composer.lock ./
 
 # Install PHPMailer and other Composer dependencies.
-RUN composer install --no-dev --optimize-autoloader --no-interaction
+RUN composer install \
+    --no-dev \
+    --prefer-dist \
+    --optimize-autoloader \
+    --no-interaction \
+    --no-progress \
+    && test -f /var/www/html/vendor/autoload.php
 
 # Copy the rest of the project.
 COPY . /var/www/html/
+
+# Keep the deployment from starting with a broken Composer install.
+RUN test -f /var/www/html/vendor/autoload.php
 
 # Create uploads directory and set permissions.
 RUN mkdir -p /var/www/html/public/uploads \

@@ -12,6 +12,13 @@ Railway-ready PHP website for Khatek Digital Tech Nig.
    `MYSQLDATABASE`.
 5. Railway supplies `PORT` automatically; the included entrypoint configures
    Apache to use it.
+6. Add these Mailtrap variables to the web service:
+   `MAILTRAP_HOST`, `MAILTRAP_PORT`, `MAILTRAP_USERNAME`,
+   `MAILTRAP_PASSWORD`, `MAILTRAP_FROM_EMAIL`, and `MAILTRAP_TO_EMAIL`.
+   Mailtrap's SMTP credentials belong in Railway Variables, not in the source
+   files.
+7. Deploy with the included `Dockerfile`. It installs PHPMailer with Composer
+   and verifies that `vendor/autoload.php` exists before Apache starts.
 
 The API also accepts `MYSQL_URL` or `MYSQL_PUBLIC_URL` when Railway provides a
 complete MySQL connection URL. `DATABASE_URL` is accepted only when its scheme

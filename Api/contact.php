@@ -7,7 +7,44 @@ header("Content-Type: application/json; charset=UTF-8");
 use PHPMailer\PHPMailer\Exception;
 use PHPMailer\PHPMailer\PHPMailer;
 
-require dirname(__DIR__) . "/vendor/autoload.php";
+$autoloadCandidates = [
+    dirname(__DIR__) . "/vendor/autoload.php",
+];
+
+// DOCUMENT_ROOT can differ from the project directory on shared hosting.
+if (!empty($_SERVER["DOCUMENT_ROOT"])) {
+    $autoloadCandidates[] = rtrim(
+        (string)$_SERVER["DOCUMENT_ROOT"],
+        "/\\"
+    ) . "/vendor/autoload.php";
+}
+
+$autoloadPath = null;
+foreach ($autoloadCandidates as $candidate) {
+    if (is_file($candidate) && is_readable($candidate)) {
+        $autoloadPath = $candidate;
+        break;
+    }
+}
+
+if ($autoloadPath === null) {
+    http_response_code(500);
+
+    error_log(
+        "Khatek contact form error: Composer autoloader not found. " .
+        "Run 'composer install --no-dev --optimize-autoloader' " .
+        "in the project root before serving the application."
+    );
+
+    echo json_encode([
+        "success" => false,
+        "message" => "The mail service is temporarily unavailable."
+    ]);
+
+    exit;
+}
+
+require $autoloadPath;
 
 if ($_SERVER["REQUEST_METHOD"] !== "POST") {
     http_response_code(405);

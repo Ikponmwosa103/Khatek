@@ -7,9 +7,6 @@
 Dockerfile
 .dockerignore
 
-# PHP dependencies
-vendor/
-
 # JS / frontend
 node_modules/
 npm-debug.log
