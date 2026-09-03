@@ -90,14 +90,14 @@ if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
 | These values come from Railway Variables.
 */
 
-$host = getenv("MAILTRAP_HOST") ?: "";
+$host = trim((string)(getenv("MAILTRAP_HOST") ?: ""));
 $port = (int)(getenv("MAILTRAP_PORT") ?: 2525);
-$username = getenv("MAILTRAP_USERNAME") ?: "";
+$username = trim((string)(getenv("MAILTRAP_USERNAME") ?: ""));
 $password = getenv("MAILTRAP_PASSWORD") ?: "";
 $encryption = strtolower(trim(getenv("MAILTRAP_ENCRYPTION") ?: "tls"));
 
-$fromEmail = getenv("MAILTRAP_FROM_EMAIL") ?: "";
-$toEmail = getenv("MAILTRAP_TO_EMAIL") ?: "";
+$fromEmail = trim((string)(getenv("MAILTRAP_FROM_EMAIL") ?: ""));
+$toEmail = trim((string)(getenv("MAILTRAP_TO_EMAIL") ?: ""));
 
 
 /*
@@ -123,6 +123,8 @@ if (
     exit;
 }
 
+
+$mail = null;
 
 try {
 
@@ -285,9 +287,13 @@ try {
 
 } catch (\Throwable $error) {
 
+    $mailError = $mail instanceof PHPMailer ? $mail->ErrorInfo : "";
+
     error_log(
         "Khatek contact form error: " .
-        $error->getMessage()
+        $error->getMessage() .
+        " [SMTP host={$host}; port={$port}; encryption={$encryption}; " .
+        "mail_error={$mailError}]"
     );
 
     http_response_code(500);
