@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 header("Content-Type: application/json; charset=UTF-8");
 
-use PHPMailer\PHPMailer\Exception;
 use PHPMailer\PHPMailer\PHPMailer;
 
 $autoloadCandidates = [
@@ -95,6 +94,7 @@ $host = getenv("MAILTRAP_HOST") ?: "";
 $port = (int)(getenv("MAILTRAP_PORT") ?: 2525);
 $username = getenv("MAILTRAP_USERNAME") ?: "";
 $password = getenv("MAILTRAP_PASSWORD") ?: "";
+$encryption = strtolower(trim(getenv("MAILTRAP_ENCRYPTION") ?: "tls"));
 
 $fromEmail = getenv("MAILTRAP_FROM_EMAIL") ?: "";
 $toEmail = getenv("MAILTRAP_TO_EMAIL") ?: "";
@@ -143,6 +143,17 @@ try {
     $mail->Password = $password;
 
     $mail->Port = $port;
+    $mail->Timeout = 15;
+
+    if ($encryption === "tls") {
+        $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;
+    } elseif ($encryption === "ssl") {
+        $mail->SMTPSecure = PHPMailer::ENCRYPTION_SMTPS;
+    } elseif ($encryption !== "none") {
+        throw new RuntimeException(
+            "MAILTRAP_ENCRYPTION must be tls, ssl, or none."
+        );
+    }
 
 
     /*
@@ -272,7 +283,7 @@ try {
     ]);
 
 
-} catch (Exception $error) {
+} catch (\Throwable $error) {
 
     error_log(
         "Khatek contact form error: " .
