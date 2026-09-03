@@ -1911,7 +1911,7 @@ color: #2563eb;
               </div>
             </div>
           </div>
-          <form class="card glass form-card reveal" id="contactForm">
+          <form class="card glass form-card reveal" id="contactForm" action="./Api/contact.php" method="post">
             <div class="form-grid">
               <div class="field"><label for="name">Name</label><input id="name" name="name" type="text" placeholder="Your full name" required></div>
               <div class="field"><label for="email">Email</label><input id="email" name="email" type="email" placeholder="your@email.com" required></div>
@@ -2026,72 +2026,49 @@ color: #2563eb;
 
     backToTop.addEventListener("click",()=>window.scrollTo({top:0,behavior:"smooth"}));
 
-    contactForm.addEventListener("submit",e=>{
-      e.preventDefault();
-      const name=document.getElementById("name").value.trim();
-      const email=document.getElementById("email").value.trim();
-      const message=document.getElementById("message").value.trim();
-      if(!name||!email||!message)return;
-      const subject=encodeURIComponent("Inquiry from "+name+" - Khatek Digital Tech Nig.");
-      const body=encodeURIComponent("Name: "+name+"\nEmail: "+email+"\n\nMessage:\n"+message);
-      formMessage.classList.add("show");
-contactForm.addEventListener("submit", async (e) => {
-    e.preventDefault();
+    contactForm.addEventListener("submit", async (event) => {
+      event.preventDefault();
 
-    const name = document.getElementById("name").value.trim();
-    const email = document.getElementById("email").value.trim();
-    const message = document.getElementById("message").value.trim();
-
-    const submitButton = contactForm.querySelector(
+      const submitButton = contactForm.querySelector(
         'button[type="submit"]'
-    );
+      );
+      const formData = new FormData(contactForm);
 
-    // Check fields
-    if (!name || !email || !message) {
-        formMessage.textContent = "Please fill in all fields.";
-        formMessage.classList.add("show");
-        return;
-    }
+      submitButton.disabled = true;
+      submitButton.textContent = "Sending...";
+      formMessage.textContent = "Sending your message...";
+      formMessage.classList.add("show");
 
-    // Disable button while sending
-    submitButton.disabled = true;
-    submitButton.textContent = "Sending...";
-
-    try {
+      try {
         const response = await fetch("./Api/contact.php", {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/x-www-form-urlencoded;charset=UTF-8"
-            },
-            body: new URLSearchParams({
-                name: name,
-                email: email,
-                message: message
-            })
+          method: "POST",
+          body: formData,
+          credentials: "same-origin",
+          headers: {
+            Accept: "application/json"
+          }
         });
 
         const result = await response.json();
+        formMessage.textContent = result.message || (
+          response.ok
+            ? "Your message has been sent successfully."
+            : "Unable to send your message. Please try again."
+        );
 
-        formMessage.textContent = result.message;
-        formMessage.classList.add("show");
-
-        if (result.success) {
-            contactForm.reset();
+        if (response.ok && result.success) {
+          contactForm.reset();
         }
-
-    } catch (error) {
+      } catch (error) {
         console.error("Contact form error:", error);
-
         formMessage.textContent =
-            "Unable to send your message. Please try again.";
-
+          "Unable to send your message. Please try again.";
+      } finally {
         formMessage.classList.add("show");
-
-    } finally {
         submitButton.disabled = false;
         submitButton.textContent = "Send message →";
-    }
-});    });
+      }
+    });
   </script>
 </body>
 </html>
