@@ -2,8 +2,11 @@ FROM php:8.3-apache
 
 WORKDIR /var/www/html
 
-# Install PHP extensions required by the project.
-RUN docker-php-ext-install pdo_mysql
+# Install PHP extensions and tools required by Composer and the project.
+RUN apt-get update \
+    && apt-get install -y --no-install-recommends libzip-dev unzip \
+    && docker-php-ext-install pdo_mysql zip \
+    && rm -rf /var/lib/apt/lists/*
 
 # Install Composer.
 COPY --from=composer:2 /usr/bin/composer /usr/bin/composer
