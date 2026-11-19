@@ -4,8 +4,8 @@ WORKDIR /var/www/html
 
 # Install PHP extensions and tools required by Composer and the project.
 RUN apt-get update \
-    && apt-get install -y --no-install-recommends libzip-dev unzip \
-    && docker-php-ext-install pdo_mysql zip \
+    && apt-get install -y --no-install-recommends libzip-dev libpq-dev unzip \
+    && docker-php-ext-install pdo_pgsql zip \
     && rm -rf /var/lib/apt/lists/*
 
 # Install Composer.
