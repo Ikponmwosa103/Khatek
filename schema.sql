@@ -22,3 +22,6 @@ CREATE TRIGGER users_set_updated_at
 BEFORE UPDATE ON users
 FOR EACH ROW
 EXECUTE FUNCTION set_users_updated_at();
+
+-- Enforce case-insensitive email uniqueness, matching typical MySQL behavior.
+CREATE UNIQUE INDEX IF NOT EXISTS users_email_lower_unique ON users (LOWER(email));

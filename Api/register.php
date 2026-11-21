@@ -46,7 +46,7 @@ if (!is_array($data)) {
 }
 
 $name = trim($data["name"] ?? $data["full_name"] ?? "");
-$email = trim($data["email"] ?? "");
+$email = strtolower(trim($data["email"] ?? ""));
 $phone = trim($data["phone"] ?? "");
 $password = $data["password"] ?? "";
 

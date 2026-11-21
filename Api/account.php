@@ -3,7 +3,7 @@
 declare(strict_types=1);
 
 header("Content-Type: application/json; charset=UTF-8");
-require_once __DIR__ . "/session.php";
+session_start();
 require_once __DIR__ . "/db.php";
 
 if (!isset($_SESSION["user_id"])) {
