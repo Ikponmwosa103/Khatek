@@ -87,7 +87,7 @@ if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
 |--------------------------------------------------------------------------
 | MAILTRAP SETTINGS
 |--------------------------------------------------------------------------
-| These values come from Railway Variables.
+| These values come from Render Environment settings.
 */
 
 $host = trim((string)(getenv("MAILTRAP_HOST") ?: ""));

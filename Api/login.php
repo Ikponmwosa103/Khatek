@@ -1,7 +1,7 @@
 <?php
 
 header("Content-Type: application/json");
-session_start();
+require_once __DIR__ . "/session.php";
 
 require_once __DIR__ . "/db.php";
 
@@ -18,7 +18,7 @@ if ($_SERVER["REQUEST_METHOD"] !== "POST") {
 
 $data = json_decode(file_get_contents("php://input"), true);
 
-$email = trim($data["email"] ?? "");
+$email = strtolower(trim($data["email"] ?? ""));
 $password = $data["password"] ?? "";
 
 if ($email === "" || $password === "") {

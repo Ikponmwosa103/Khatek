@@ -2,7 +2,7 @@
 
 header("Content-Type: application/json");
 
-session_start();
+require_once __DIR__ . "/session.php";
 
 require_once __DIR__ . "/db.php";
 
@@ -14,7 +14,6 @@ require_once __DIR__ . "/db.php";
 */
 
 if ($_SERVER["REQUEST_METHOD"] !== "POST") {
-
     http_response_code(405);
 
     echo json_encode([
@@ -33,18 +32,9 @@ if ($_SERVER["REQUEST_METHOD"] !== "POST") {
 */
 
 $input = file_get_contents("php://input");
-
 $data = json_decode($input, true);
 
-
-/*
-|--------------------------------------------------------------------------
-| Check JSON
-|--------------------------------------------------------------------------
-*/
-
 if (!is_array($data)) {
-
     http_response_code(400);
 
     echo json_encode([
@@ -55,32 +45,12 @@ if (!is_array($data)) {
     exit;
 }
 
-
-/*
-|--------------------------------------------------------------------------
-| Get form values
-|--------------------------------------------------------------------------
-*/
-
 $name = trim($data["name"] ?? $data["full_name"] ?? "");
-$email = trim($data["email"] ?? "");
+$email = strtolower(trim($data["email"] ?? ""));
 $phone = trim($data["phone"] ?? "");
 $password = $data["password"] ?? "";
 
-
-/*
-|--------------------------------------------------------------------------
-| Required fields
-|--------------------------------------------------------------------------
-*/
-
-if (
-    $name === "" ||
-    $email === "" ||
-    $phone === "" ||
-    $password === ""
-) {
-
+if ($name === "" || $email === "" || $phone === "" || $password === "") {
     http_response_code(400);
 
     echo json_encode([
@@ -91,15 +61,7 @@ if (
     exit;
 }
 
-
-/*
-|--------------------------------------------------------------------------
-| Validate name
-|--------------------------------------------------------------------------
-*/
-
 if (strlen($name) < 2) {
-
     http_response_code(400);
 
     echo json_encode([
@@ -110,15 +72,7 @@ if (strlen($name) < 2) {
     exit;
 }
 
-
-/*
-|--------------------------------------------------------------------------
-| Validate email
-|--------------------------------------------------------------------------
-*/
-
 if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
-
     http_response_code(400);
 
     echo json_encode([
@@ -129,15 +83,7 @@ if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
     exit;
 }
 
-
-/*
-|--------------------------------------------------------------------------
-| Validate phone
-|--------------------------------------------------------------------------
-*/
-
 if (strlen($phone) < 7) {
-
     http_response_code(400);
 
     echo json_encode([
@@ -148,15 +94,7 @@ if (strlen($phone) < 7) {
     exit;
 }
 
-
-/*
-|--------------------------------------------------------------------------
-| Validate password
-|--------------------------------------------------------------------------
-*/
-
 if (strlen($password) < 8) {
-
     http_response_code(400);
 
     echo json_encode([
@@ -167,63 +105,13 @@ if (strlen($password) < 8) {
     exit;
 }
 
-
-/*
-|--------------------------------------------------------------------------
-| Check if email already exists
-|--------------------------------------------------------------------------
-*/
-
 try {
+    $passwordHash = password_hash($password, PASSWORD_DEFAULT);
 
     $stmt = $pdo->prepare(
-        "SELECT id
-         FROM users
-         WHERE email = ?
-         LIMIT 1"
-    );
-
-    $stmt->execute([$email]);
-
-    $existingUser = $stmt->fetch();
-
-
-    if ($existingUser) {
-
-        http_response_code(409);
-
-        echo json_encode([
-            "success" => false,
-            "error" => "email_exists",
-            "message" => "An account with this email already exists."
-        ]);
-
-        exit;
-    }
-
-
-    /*
-    |--------------------------------------------------------------------------
-    | Hash password
-    |--------------------------------------------------------------------------
-    */
-
-    $passwordHash = password_hash(
-        $password,
-        PASSWORD_DEFAULT
-    );
-
-
-    /*
-    |--------------------------------------------------------------------------
-    | Insert new account
-    |--------------------------------------------------------------------------
-    */
-
-    $stmt = $pdo->prepare(
-        "INSERT INTO users
-        (full_name, email, phone, password_hash)
-        VALUES (?, ?, ?, ?)"
+        "INSERT INTO users (full_name, email, phone, password_hash)
+         VALUES (?, ?, ?, ?)
+         RETURNING id"
     );
 
     $stmt->execute([
@@ -233,21 +121,7 @@ try {
         $passwordHash
     ]);
 
-
-    /*
-    |--------------------------------------------------------------------------
-    | Get newly created user ID
-    |--------------------------------------------------------------------------
-    */
-
-    $userId = $pdo->lastInsertId();
-
-
-    /*
-    |--------------------------------------------------------------------------
-    | Registration successful
-    |--------------------------------------------------------------------------
-    */
+    $userId = (int) $stmt->fetchColumn();
 
     http_response_code(201);
 
@@ -263,15 +137,21 @@ try {
     ]);
 
     exit;
+} catch (PDOException $error) {
+    // PostgreSQL unique_violation: avoid exposing database details.
+    if ($error->getCode() === "23505") {
+        http_response_code(409);
 
+        echo json_encode([
+            "success" => false,
+            "error" => "email_exists",
+            "message" => "An account with this email already exists."
+        ]);
 
-} catch (PDOException $e) {
+        exit;
+    }
 
-    /*
-    |--------------------------------------------------------------------------
-    | Database error
-    |--------------------------------------------------------------------------
-    */
+    error_log("Registration database error: " . $error->getCode());
 
     http_response_code(500);
 
