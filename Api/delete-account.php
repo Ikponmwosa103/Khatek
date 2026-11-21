@@ -3,7 +3,7 @@
 declare(strict_types=1);
 
 header("Content-Type: application/json; charset=UTF-8");
-session_start();
+require_once __DIR__ . "/session.php";
 require_once __DIR__ . "/db.php";
 
 if ($_SERVER["REQUEST_METHOD"] !== "POST" && $_SERVER["REQUEST_METHOD"] !== "DELETE") {
