@@ -12,7 +12,7 @@ RUN apt-get update \
 COPY --from=composer:2 /usr/bin/composer /usr/bin/composer
 ENV COMPOSER_ALLOW_SUPERUSER=1
 
-# Configure Apache for Railway.
+# Configure Apache for Render and other PORT-based hosts.
 RUN a2dismod mpm_event mpm_worker mpm_prefork >/dev/null 2>&1 || true \
     && rm -f /etc/apache2/mods-enabled/mpm_*.load \
              /etc/apache2/mods-enabled/mpm_*.conf \
